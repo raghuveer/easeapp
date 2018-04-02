@@ -60,13 +60,15 @@ $route_name_key = match_route($total_routes, $route_check_input, $r_e_var_count,
 //echo $total_routes["$route_name_key"]["is_ajax"] . "<br>";
 $page_filename = $total_routes["$route_name_key"]["page_filename"];
 $page_is_ajax = $total_routes["$route_name_key"]["is_ajax"];
+$page_is_web_service_endpoint = $total_routes["$route_name_key"]["is_web_service_endpoint"];
 $page_is_frontend = $total_routes["$route_name_key"]["is_frontend_page"];
 $request_method = $total_routes["$route_name_key"]["request_method"];  
 $route_filename = substr($page_filename, 0, -4);
-//echo $page_filename . "<br>";
-//echo $page_is_ajax . "<br>";
-//echo $page_is_frontend . "<br>";
-//echo $request_method . "<br>";
-//echo $route_filename . "<br>";	   
+//echo "page_filename: " . $page_filename . "<br>";
+//echo "page_is_ajax: " . $page_is_ajax . "<br>";
+//echo "page_is_web_service_endpoint: " . $page_is_web_service_endpoint . "<br>";
+//echo "page_is_frontend: " . $page_is_frontend . "<br>";
+//echo "request_method: " . $request_method . "<br>";
+//echo "route_filename: " . $route_filename . "<br>";	   
 global $route_filename;	 
 ?>

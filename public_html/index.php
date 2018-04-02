@@ -218,10 +218,25 @@ $template_config = array(
 
 //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
 if (($page_is_ajax == "1") && ($page_is_frontend == "3")) {
-  if ($page_filename != "not-found.php"){
-	  include "ajax-pages/" . $page_filename;
-	}
+    if ($page_filename != "not-found.php"){
+	    if ($page_is_web_service_endpoint == "0"){
+			//Pure Ajax Call Scenario
+	        include "ajax-pages/" . $page_filename;
+  	    } else if ($page_is_web_service_endpoint == "1"){
+			//Web Service Endpoint Scenario
+			include "rest-apis/" . "web-service-endpoint-header.php";
+	        include "rest-apis/" . $page_filename;
+  	    } else if ($page_is_web_service_endpoint == "2"){
+			//Either Ajax Call or Web Service Endpoint Scenario (Common for BOTH)
+	        include "ajax-common/" . $page_filename;
+  	    } else if ($page_is_web_service_endpoint == "3"){
+			//Is not an ajax request
+	        include "ajax-common/" . "incorrect-route-ajax-settings.php";
+  	    }
+	  //include "ajax-pages/" . $page_filename;
+  	}
 }
+
 //$k_te = new krupa($template_config);
 
 //$k_te->start();

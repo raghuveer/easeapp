@@ -28,7 +28,15 @@
   *
   * 5) "is_ajax" => "1", "is_frontend_page" => "3"
   * This means, http request is an ajax request and this represents, pure ajax call/web service call
-  *
+  * a) "is_web_service_endpoint" => "0"
+  * This means, http request is an ajax request and this represents, pure ajax call
+  * b) "is_web_service_endpoint" => "1"
+  * This means, http request is an ajax request and this represents, web service endpoint
+  * c) "is_web_service_endpoint" => "2"
+  * This means, http request is an ajax request and this represents, either ajax call or web service endpoint
+  * d) "is_web_service_endpoint" => "3"
+  * This means, http request is basically not an ajax request
+  *  
   * 
   * 
   * II. This is to check the Request Method of the request
@@ -67,6 +75,7 @@
 							  "route_var_count" => "2",
 							  "page_filename" => "default-home.php",
                               "is_ajax" => "0",
+							  "is_web_service_endpoint" => "3",
                               "is_frontend_page" => "1",
                               "request_method" => "ANY"                                    
                              );
@@ -75,6 +84,7 @@
 							  "route_var_count" => "2",
 							  "page_filename" => "default-home.php",
                               "is_ajax" => "0",
+							  "is_web_service_endpoint" => "3",
                               "is_frontend_page" => "1",
                               "request_method" => "ANY"                                    
                              ); 							 
@@ -85,6 +95,7 @@
 							 "route_var_count" => "3",
 							 "page_filename" => "header-response-only-400-bad-request.php",
 							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "2",
 							 "is_frontend_page" => "3",
                              "request_method" => "ANY"                                    
 							);
@@ -94,6 +105,7 @@
 							 "route_var_count" => "3",
 							 "page_filename" => "header-response-only-401-unauthorized.php",
 							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "2",
 							 "is_frontend_page" => "3",
                              "request_method" => "ANY"                                    
 							);							
@@ -103,15 +115,17 @@
 							 "route_var_count" => "3",
 							 "page_filename" => "header-response-only-403-forbidden.php",
 							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "2",
 							 "is_frontend_page" => "3",
                              "request_method" => "ANY"                                    
 							);
 							
 //Header Response Only for API Service Responses - 404 Not Found
- $routes["header-response-only-404-not-found"] = array("route_value" => "/header-response-only/400-not-found",
+ $routes["header-response-only-404-not-found"] = array("route_value" => "/header-response-only/404-not-found",
 							 "route_var_count" => "3",
 							 "page_filename" => "header-response-only-404-not-found.php",
 							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "2",
 							 "is_frontend_page" => "3",
                              "request_method" => "ANY"                                    
 							);							
@@ -121,6 +135,7 @@
 							 "route_var_count" => "3",
 							 "page_filename" => "header-response-only-405-method-not-allowed.php",
 							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "2",
 							 "is_frontend_page" => "3",
                              "request_method" => "ANY"                                    
 							);
@@ -130,6 +145,7 @@
 							 "route_var_count" => "3",
 							 "page_filename" => "rest-login.php",
 							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "1",
 							 "is_frontend_page" => "3",
                              "request_method" => "POST"                                    
 							);

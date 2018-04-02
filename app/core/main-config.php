@@ -16,19 +16,19 @@
  */
 //Config
 $main_config = array();  
-$main_config["site_config_site_name"] = "Easeapp PHP Framework v1";
+$main_config["site_config_site_name"] = "Easeapp PHP Framework v2";
 $main_config["site_config_site_caption"] = "";
 $main_config["project_main_folder"] = "";
-$main_config["dev_url"] = "dev-framework-v1.easeapp.org";
+$main_config["dev_url"] = "dev-framework-v2.easeapp.org";
 $main_config["live_url"] = "www.easeapp.org";
 $main_config["live_url_main_domain_name"] = "www.easeapp.org";
-$main_config["cli_dev_account_ref"] = "devfrv1";
+$main_config["cli_dev_account_ref"] = "devfrv2";
 $main_config["cli_live_account_ref"] = "easeapp";
 $main_config["organisation_name"] = "Raghuveer Dendukuri";
 $main_config["organisation_name_full"] = "Raghuveer Dendukuri and Contributors";
 $main_config["siteroot_basedir"] = $_SERVER['DOCUMENT_ROOT'] . "/";
 $main_config["siteroot_basedir_command_line"] = "/home/easeapp/public_html/";
-$main_config["siteroot_basedir_command_line_dev"] = "/home/devfrv1/public_html/";
+$main_config["siteroot_basedir_command_line_dev"] = "/home/devfrv2/public_html/";
 $main_config["routing_rule_length"] = "500";
 $main_config["encr_filename_salt_length"] = "20";
 $main_config["encr_filename_length"] = "45";
