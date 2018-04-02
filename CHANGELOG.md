@@ -22,5 +22,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - "Ajax Calls / REST API Endpoints" can be defined in same Ajax Route Concept.
 - "Admin / Frontend" template folders isolation.
 - "Front Controller Pattern" is used.
+- "Virtual Cron Manager", setup included.
 - "Many Security Wrappers / Conventions" for reasonable application security.
 - "Minimalistic Code", as this is gist of last few years of code consolidation (from 2014 minimum, even though, the early attempts date back to 2009 and before).
