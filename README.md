@@ -4,9 +4,9 @@ Easeapp is a Simple MVC based Procedural Framework that is written in PHP.
 
 Easeapp is based on Single Controller Pattern / Front Controller Pattner, that has a simple yet powerful routing system, that can be used to have all website URLs in SEO approach. It offers both Static as well as Dynamic routes, that enables the developer to use it for:
 
-..* Web Application with Frontend and / or Backend
-..* REST APIs
-..* Ajax Calls etc...
+1. Web Application with Frontend and / or Backend
+2. REST APIs
+3. Ajax Calls etc...
 
 <u>Note:</u> A different route, have to be uniquely defined for web page url / Ajax Call / REST API Endpoint. In scenarios, multiple routes can point to same file. All routes can be explicitly restricted to support a single method (GET / POST / PUT / DELETE etc) or leave it, as is, to work, on any Request Method.
  
