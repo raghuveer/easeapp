@@ -1,0 +1,41 @@
+# Easeapp PHP Framework - A Simple MVC based Procedural Framework in PHP 
+#
+# @package  Easeapp
+# @author   Raghu Veer Dendukuri <raghuveer.d@easeapp.org>
+# @website  http://www.easeapp.org
+# @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+# @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri and other contributors
+#
+# single rewrite rule
+<IfModule mod_rewrite.c>
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php [L,QSA]
+
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
+# enabling cors for this website to allow single website specifically
+# http://www.webdevdoor.com/jquery/cross-domain-browser-json-ajax/
+#Header add Access-Control-Allow-Origin: "http://dev-framework-v1.easeapp.org"
+
+#enabling cors for this website to allow multiple websites specifically
+SetEnvIf Origin "http(s)?://(front.securitywonks.net|downloads.grailit.com|www.securitywonks.net)$" AccessControlAllowOrigin=$0$1
+   Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+
+# Don't allow any pages to be framed - Defends against CSRF
+Header set X-Frame-Options DENY
+
+# prevent mime based attacks
+Header set X-Content-Type-Options "nosniff"
+
+# Turn on IE8-IE9 XSS prevention tools
+Header set X-XSS-Protection "1; mode=block"   
+   
+# To manually declare date.timezone php setting
+# http://php.net/manual/en/function.date-default-timezone-set.php#115128
+# http://myquickfix.co.uk/2011/10/set-date-timezone-without-using-php-in/
+#php_value date.timezone "Europe/London"
+</IfModule>

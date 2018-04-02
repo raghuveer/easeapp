@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /ajax-pages
+Disallow: /cgi-bin
+Disallow: /cron_php_files
+Disallow: /robots-txt-cache
+Disallow: /templates
+
+Sitemap: http://dev-framework-v1.easeapp.org/sitemap.xml

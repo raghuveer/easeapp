@@ -1,0 +1,12 @@
+The command to attach a file can be placed anywhere between $mail = new PHPMailer(); and !$mail->Send(); and it's called AddAttachment($path);. This single line will add the attachment to your mail.
+
+$path is the path of the filename. It can be a relative one (from your script, not the PHPMailer class) or a full path to the file you want to attach.
+
+If you want more options or you want to specify encoding and the MIME type of the file, then you can use three more parameters, all of which are optional:
+AddAttachment($path,$name,$encoding,$type);
+
+$name is an optional parameter, used to set the name of the file that will be embedded within the e-mail. The person who will recieve your mail will then only see this name, rather than the original filename.
+
+$encoding is a little more technical, but with this parameter you can set the type of encoding of the attachment. The default is base64. Other types that are supported include: 7bit, 8bit, binary & quoted-printable. Please refer to your SMTP documentation about encoding and the differences between types. In general, mail servers will convert encodings they don't want to handle into their preferred encoding type.
+
+$type is the MIME type of the attached file. Content types are defined not necessarily by file suffixes (i.e., .GIF or .MP3), but, rather, a MIME type (MIME = Multipurpose Internet Mail Extensions) is used. This parameter makes it possible change the MIME type of an attachment from the default value of application/octet-stream (which works with every kind of file) to a more specific MIME type, such as image/jpeg for a .JPG photo, for instance.
