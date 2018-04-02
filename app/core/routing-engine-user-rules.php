@@ -55,21 +55,5 @@
 //Different Routing Engine Rules
  $user_defined_routes = array();
 
-//Show Email Ids for provided Domain Name
- $user_defined_routes["show-email-ids-for-domain-name"] = array("route_value" => "/show-email-ids/domain-name",
-							 "route_var_count" => "3",
-							 "page_filename" => "show-email-ids-for-domain-name.php",
-							 "is_ajax" => "0",
-							 "is_frontend_page" => "1",
-                             "request_method" => "ANY"                                    
-							);
-//Show Email Ids for provided Domain Name REST Web Service
- $user_defined_routes["show-email-ids-for-domain-name-service"] = array("route_value" => "/rest/show-email-ids-for-domain-name/keyword/" . $routing_eng_var_4,
-							 "route_var_count" => "5",
-							 "page_filename" => "rest-show-email-ids-for-domain-name.php",
-							 "is_ajax" => "1",
-							 "is_frontend_page" => "3",
-                             "request_method" => "GET"                                    
-							); 
   
 ?>
