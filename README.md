@@ -110,4 +110,6 @@ This utilizes the minimal inbuilt security options, while providing several defa
                              "request_method" => "POST"                                    
 							);	
 	```	
-	
+
+# License
+The Easeapp PHP framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT "MIT License").
