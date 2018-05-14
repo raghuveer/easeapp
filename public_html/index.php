@@ -104,9 +104,6 @@ if(function_exists("date_default_timezone_set"))
 //Define the Default timezone.	
 date_default_timezone_set($date_default_timezone_set); // $date_default_timezone_set from /app/core/main-config.php
 }
-//PHPExcel Library to process excel files (both read / write excel files in php)
-include "../app/includes/Classes/PHPExcel.php";
-include "../app/includes/Classes/PHPExcel/IOFactory.php";
 
 //HTMLawed Library to purify and filter HTML (http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/)
 include "../app/includes/htmLawed.php"; 
@@ -127,7 +124,11 @@ include "../app/core/session-check-functions.php";
 include "../app/core/user-authorization-functions.php";
 
 //PHPMailer Library: This is to send Email through SMTP / Sendmail in PHP Scripts
-include "../app/includes/phpmailer/class.phpmailer.php";
+include "../app/includes/phpmailer-v602/src/PHPMailer.php";
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 $phpmailer_sendmail = new PHPMailer(true); // the true param means it will throw exceptions on errors, which we need to catch
 $phpmailer_sendmail->IsSendmail(); // telling the class to use SendMail transport
 $phpmailer_sendmail->CharSet="utf-8";
@@ -164,6 +165,12 @@ include "../app/core/db-connect-main.php";
 //This contains some of the basic PDO Prepared Statements based DB Functions
 include "../app/includes/db-functions.php";
 
+//Include a Logger
+include "../app/class/Logger.php";
+
+//Include a DB Manager
+include "../app/class/DBManager.php";
+
 //This hosts any generic application related functions for the application that uses this framework
 include "../app/includes/other-functions.php";
 
@@ -189,6 +196,226 @@ $pslManager = new PublicSuffixListManager();
 $parser = new Parser($pslManager->getList());
 //FQDN and Sub Domain Name Parsing by jeremykendall-php-domain-parser end https://github.com/jeremykendall/php-domain-parser
 
+//For UUID Generation
+include "../app/includes/uuid.php";
+
+//This hosts any miscellaneous set of functions that are useful and that do not fit elsewhere
+include "../app/includes/misc-functions.php";
+
+
+//Check the installed versions of Libsodium
+echo "<br>var_dump result<br>";
+var_dump([
+    SODIUM_LIBRARY_MAJOR_VERSION,
+    SODIUM_LIBRARY_MINOR_VERSION,
+    SODIUM_LIBRARY_VERSION
+]);
+echo "<br>print_r result<br>";
+print_r([
+    SODIUM_LIBRARY_MAJOR_VERSION,
+    SODIUM_LIBRARY_MINOR_VERSION,
+    SODIUM_LIBRARY_VERSION
+]);
+//echo "<br><hr><br><pre>";
+
+
+//if ((version_compare(PHP_VERSION, '5.6.0') >= 0) && (version_compare(PHP_VERSION, '7.0.0') == -1)) {
+if ((version_compare(PHP_VERSION, '5.6.0') >= 0) && (version_compare(PHP_VERSION, '7.0.0') == -1)) {	
+    //echo 'I am between PHP version 5.6.0 and PHP version 7.0.0, my version: ' . PHP_VERSION . "\n";
+	//This is applicable for PHP Versions between v5.6.0 and v7.0.0
+	
+        include "../app/includes/halite-v150/halite-v150-includes.php";
+
+
+	/*//Retrieve the previous saved Symmetric Encryption key from the file
+	$pg_symmetric_encryption_key = \ParagonIE\Halite\KeyFactory::loadEncryptionKey($site_home_path . $pg_generated_enc_keys_folder_name. $pg_symmetric_encryption_key_filename);*/
+
+	//Retrieve the previous saved Asymmetric Anonymous Encryption key from the file
+	$pg_asymmetric_anonymous_encryption_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_keypair_filename);
+
+	$pg_asymmetric_anonymous_encryption_secret_key = $pg_asymmetric_anonymous_encryption_keypair->getSecretKey();
+	$pg_asymmetric_anonymous_encryption_public_key = $pg_asymmetric_anonymous_encryption_keypair->getPublicKey();
+	
+	//Retrieve the previous saved Asymmetric Anonymous Encryption key for Logs from the file
+	$pg_asymmetric_anonymous_encryption_logs_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_logs_keypair_filename);
+
+	$pg_asymmetric_anonymous_encryption_logs_secret_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getSecretKey();
+	$pg_asymmetric_anonymous_encryption_logs_public_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getPublicKey();
+
+	//Retrieve the previous saved Asymmetric Authentication key from the file
+	$pg_asymmetric_authentication_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_keypair_filename);
+
+	$pg_asymmetric_authentication_secret_key = $pg_asymmetric_authentication_keypair->getSecretKey();
+	$pg_asymmetric_authentication_public_key = $pg_asymmetric_authentication_keypair->getPublicKey();
+	
+	//Retrieve the previous saved Asymmetric Authentication key for Logs from the file
+	$pg_asymmetric_authentication_logs_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_logs_keypair_filename);
+
+	$pg_asymmetric_authentication_logs_secret_key = $pg_asymmetric_authentication_logs_keypair->getSecretKey();
+	$pg_asymmetric_authentication_logs_public_key = $pg_asymmetric_authentication_logs_keypair->getPublicKey();
+
+	
+} else if ((version_compare(PHP_VERSION, '7.0.0') >= 0) && (version_compare(PHP_VERSION, '7.2.0') == -1)) {	
+	//echo 'I am between PHP version 7.0.0 and PHP version 7.2.0, my version: ' . PHP_VERSION . "\n";
+	//This is applicable for PHP Versions between v7.0.0 and v7.2.0
+	
+        include "../app/includes/halite-v320/halite-v320-includes.php";
+
+
+	/*//Retrieve the previous saved Symmetric Encryption key from the file
+	$pg_symmetric_encryption_key = \ParagonIE\Halite\KeyFactory::loadEncryptionKey($site_home_path . $pg_generated_enc_keys_folder_name. $pg_symmetric_encryption_key_filename);*/
+
+	//Retrieve the previous saved Asymmetric Anonymous Encryption key from the file
+	$pg_asymmetric_anonymous_encryption_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_keypair_filename);
+
+	$pg_asymmetric_anonymous_encryption_secret_key = $pg_asymmetric_anonymous_encryption_keypair->getSecretKey();
+	$pg_asymmetric_anonymous_encryption_public_key = $pg_asymmetric_anonymous_encryption_keypair->getPublicKey();
+	
+	//Retrieve the previous saved Asymmetric Anonymous Encryption key for Logs from the file
+	$pg_asymmetric_anonymous_encryption_logs_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_logs_keypair_filename);
+
+	$pg_asymmetric_anonymous_encryption_logs_secret_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getSecretKey();
+	$pg_asymmetric_anonymous_encryption_logs_public_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getPublicKey();
+
+	//Retrieve the previous saved Asymmetric Authentication key from the file
+	$pg_asymmetric_authentication_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_keypair_filename);
+
+	$pg_asymmetric_authentication_secret_key = $pg_asymmetric_authentication_keypair->getSecretKey();
+	$pg_asymmetric_authentication_public_key = $pg_asymmetric_authentication_keypair->getPublicKey();
+	
+	//Retrieve the previous saved Asymmetric Authentication key for Logs from the file
+	$pg_asymmetric_authentication_logs_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_logs_keypair_filename);
+
+	$pg_asymmetric_authentication_logs_secret_key = $pg_asymmetric_authentication_logs_keypair->getSecretKey();
+	$pg_asymmetric_authentication_logs_public_key = $pg_asymmetric_authentication_logs_keypair->getPublicKey();
+} else if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
+    //echo 'I am at least PHP version 7.2.0, my version: ' . PHP_VERSION . "\n<br><br>";
+	//This is applicable for PHP Versions equal to or above v7.2.0
+		//Include Constant Time Encoding Library v2.0 from Paragonie
+		include "../app/includes/constant-time-encoding-v20/constant-time-encoding-v20-includes.php";
+		include "../app/includes/halite-v402/halite-v402-includes.php";
+		//echo "<br><br>";
+		
+		
+		
+		//The following is from /app/includes/halite-v402/autoload.php
+	    //include "../app/includes/halite-v401/halite-v402-includes.php";
+		//echo dirname( __DIR__ ) . '/app/includes/halite-v401/src/';
+		//echo __DIR__.'/src/';
+		//exit;
+		  /**
+		 * You aren't using Composer, so, here's an autoloader instead.
+		 */
+		/*spl_autoload_register(function ($class) {
+			$prefix = 'ParagonIE\\Halite\\';
+			//$base_dir = __DIR__.'/src/';
+			//$base_dir = dirname( __DIR__ ) . '/app/includes/halite-v401/src/';
+			$base_dir = dirname( __DIR__ ) . '/app/includes/halite-v402/src/';
+			
+			// Does the class use the namespace prefix?
+			$len = \strlen($prefix);
+			if (\strncmp($prefix, $class, $len) !== 0) {
+				// no, move to the next registered autoloader
+				return;
+			}
+
+			// Get the relative class name
+			$relative_class = \substr($class, $len);
+
+			// Replace the namespace prefix with the base directory, replace namespace
+			// separators with directory separators in the relative class name, append
+			// with .php
+			$file = $base_dir.
+				\str_replace(
+					['\\', '_'],
+					'/',
+					$relative_class
+				).'.php';
+
+			// If the file exists, require it
+			if (\file_exists($file) && \strpos(\realpath($file), $base_dir) === 0) {
+				require $file;
+			}
+		});*/
+		
+		
+		/*
+		//Check, if Libsodium is setup correctly
+		if (ParagonIE\Halite\Halite::isLibsodiumSetupCorrectly(true) === true) {
+		echo "true";
+		}*/
+	//echo ParagonIE\Halite\Halite::isLibsodiumSetupCorrectly(true);	
+	//echo "<br><br>";
+	/*//Retrieve the previous saved Symmetric Encryption key from the file
+	$pg_symmetric_encryption_key = \ParagonIE\Halite\KeyFactory::loadEncryptionKey($site_home_path . $pg_generated_enc_keys_folder_name. $pg_symmetric_encryption_key_filename);*/
+
+	//Retrieve the previous saved Asymmetric Anonymous Encryption key from the file
+	$pg_asymmetric_anonymous_encryption_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_keypair_filename);
+
+	$pg_asymmetric_anonymous_encryption_secret_key = $pg_asymmetric_anonymous_encryption_keypair->getSecretKey();
+	$pg_asymmetric_anonymous_encryption_public_key = $pg_asymmetric_anonymous_encryption_keypair->getPublicKey();
+	
+	//Retrieve the previous saved Asymmetric Anonymous Encryption key for Logs from the file
+	$pg_asymmetric_anonymous_encryption_logs_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_logs_keypair_filename);
+
+	$pg_asymmetric_anonymous_encryption_logs_secret_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getSecretKey();
+	$pg_asymmetric_anonymous_encryption_logs_public_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getPublicKey();
+
+	//Retrieve the previous saved Asymmetric Authentication key from the file
+	$pg_asymmetric_authentication_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_keypair_filename);
+
+	$pg_asymmetric_authentication_secret_key = $pg_asymmetric_authentication_keypair->getSecretKey();
+	$pg_asymmetric_authentication_public_key = $pg_asymmetric_authentication_keypair->getPublicKey();
+	
+	//Retrieve the previous saved Asymmetric Authentication key for Logs from the file
+	$pg_asymmetric_authentication_logs_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_logs_keypair_filename);
+
+	$pg_asymmetric_authentication_logs_secret_key = $pg_asymmetric_authentication_logs_keypair->getSecretKey();
+	$pg_asymmetric_authentication_logs_public_key = $pg_asymmetric_authentication_logs_keypair->getPublicKey();
+}
+
+/* sample codes start*/
+/*
+$message = "1 start";
+
+$sealed = \ParagonIE\Halite\Asymmetric\Crypto::seal(
+    new ParagonIE\Halite\HiddenString(
+        $message
+    ),
+    $pg_asymmetric_anonymous_encryption_public_key
+);
+echo "sealed: <br>" . $sealed . "<br><hr><br>";
+
+
+$opened = \ParagonIE\Halite\Asymmetric\Crypto::unseal(
+    $sealed,
+    $pg_asymmetric_anonymous_encryption_secret_key
+);
+
+echo "opened: <br>" . $opened . "<br><hr><br>";
+
+$signature = \ParagonIE\Halite\Asymmetric\Crypto::sign(
+    $sealed,
+    $pg_asymmetric_authentication_secret_key
+);
+echo "signature: <br>" . $signature . "<br><hr><br>";
+
+$valid = \ParagonIE\Halite\Asymmetric\Crypto::verify(
+    $sealed,
+    $pg_asymmetric_authentication_public_key,
+    $signature
+);
+echo "Signature Verification Status: <br>" . $valid . "<br><hr><br>";
+*/
+/*sample code end*/
+//exit;
+
+//Include a Custome Halite Operation
+include "../app/class/EAHalite.php";
+$objEAHalite = new EAHalite();
+
+
+$db = new DB();
 
 //This hosts user defined REST Web Service API Functions, when and if REST Web Services are offered
 include "../app/includes/other-functions-api.php";

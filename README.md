@@ -18,6 +18,12 @@ This can use any Database, while MySQL / MariaDB is chosen as default database.
 ### About Security Guidelines:
 This utilizes the minimal inbuilt security options, while providing several defaults, as convention, to secure the application, in reasonable way.
 
+### About Virtual Cron Management:
+This provides an abstraction to manage preset Cron Jobs, right from the application, through corresponding DB based Settings.
+
+### About Encryption Support:
+There is application level Encryption Support, with the support of Libsodium, that allows to use several Encryption / Digital Signature algorithms, in the Elliptical Cryptography (ECC) range, in the application.
+
 
 ### How to Create Routing Engine Rules, on Easeapp:
 
@@ -110,6 +116,7 @@ This utilizes the minimal inbuilt security options, while providing several defa
                              "request_method" => "POST"                                    
 							);	
 	```	
-
+	
 # License
 The Easeapp PHP framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT "MIT License").
+	

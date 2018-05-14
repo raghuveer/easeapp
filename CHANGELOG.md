@@ -6,6 +6,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+
+## [3.0.0] - 2018-04-02
+### Added
+- "PHP v7.2", is fully supported.
+- "RBAC related DB Tables", added in this release.
+- "Virtual Cron Management", related DB Table is added in this release.
+- "Comprehensive Encryption Support", based on Libsodium, that includes latest Symmetric / Asymmetric Encryption libraries support, in the framework.
+- "PHPMailer", v6.02 is added in this release.
+- "UUID", Class is added in this release.
+- "DBManager", Class, by Mr.Pradeep Ganapathy (Pradeep Ganapathy <bu.pradeep@gmail.com>) is added in this release.
+- "Halite", Class, by Mr.Pradeep Ganapathy (Pradeep Ganapathy <bu.pradeep@gmail.com>) is added in this release.
+- "Logger", Class, by Mr.Pradeep Ganapathy (Pradeep Ganapathy <bu.pradeep@gmail.com>) is added in this release.
+
+
+### Removed
+- "PHPmailer"  v5.27 is removed.
+- "PHPExcel" library is removed, as it is Deprecated.
+
+
 ## [2.0.0] - 2018-04-02
 ### Changed
 - "Ajax Route" sub-classified to define Ajax Calls and REST Web Service Endpoints separately.

@@ -245,6 +245,18 @@ function df_convert_date_to_unix_timestamp($date_inputted){
       return $timestamp_outcome;
 }
 
+//https://www.epochconverter.com/programming/php#date2epoch
+function df_convert_date_to_unix_timestamp_custom_timezone($date_inputted, $timezone_name_from_input, $timezone_name_to_input){
+	
+	//$TimeZoneNameFrom="Asia/Kolkata";
+	//$TimeZoneNameTo="UTC";
+	$timestamp_outcome = date_create($date_inputted, new DateTimeZone($timezone_name_from_input))
+		//->setTimezone(new DateTimeZone($TimeZoneNameTo))->format("Y-m-d H:i:s");
+		->setTimezone(new DateTimeZone($timezone_name_to_input))->format("U");
+    return $timestamp_outcome;
+}
+
+
 /* date function to convert date with custom defined timezone to it's corresponding unix timestamp */
 
 function df_convert_date_custom_timezone_to_unix_timestamp($date_inputted, $timezone_inputted){

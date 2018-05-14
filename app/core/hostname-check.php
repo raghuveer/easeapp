@@ -32,7 +32,9 @@
   $dbconnection_active = "live";
 
   $site_basedir_path = $siteroot_basedir_command_line;
-       
+   
+  $site_home_path = $site_home_path_full;
+          
   } elseif(isset($_SERVER['HTTP_HOST']) && strstr($_SERVER['HTTP_HOST'], $dev_url)) {
   $site_hostname_value = $dev_url; //you're on online dev
   
@@ -45,6 +47,8 @@
   $dbconnection_active = "dev";
 
   $site_basedir_path = $siteroot_basedir_command_line_dev;
+  
+  $site_home_path = $site_home_path_full_dev;
 
   } else {
     header('Location: ' . html_escaped_output($site_protocol_name . $live_url) . "/");

@@ -16,19 +16,21 @@
  */
 //Config
 $main_config = array();  
-$main_config["site_config_site_name"] = "Easeapp PHP Framework v2";
+$main_config["site_config_site_name"] = "Easeapp PHP Framework v3";
 $main_config["site_config_site_caption"] = "";
 $main_config["project_main_folder"] = "";
-$main_config["dev_url"] = "dev-framework-v2.easeapp.org";
+$main_config["dev_url"] = "dev-framework-v3.easeapp.org";
 $main_config["live_url"] = "www.easeapp.org";
 $main_config["live_url_main_domain_name"] = "www.easeapp.org";
-$main_config["cli_dev_account_ref"] = "devfrv2";
+$main_config["cli_dev_account_ref"] = "devfrv3";
 $main_config["cli_live_account_ref"] = "easeapp";
 $main_config["organisation_name"] = "Raghuveer Dendukuri";
 $main_config["organisation_name_full"] = "Raghuveer Dendukuri and Contributors";
 $main_config["siteroot_basedir"] = $_SERVER['DOCUMENT_ROOT'] . "/";
 $main_config["siteroot_basedir_command_line"] = "/home/easeapp/public_html/";
-$main_config["siteroot_basedir_command_line_dev"] = "/home/devfrv2/public_html/";
+$main_config["siteroot_basedir_command_line_dev"] = "/home/devfrv3/public_html/";
+$main_config["site_home_path_full"] = "/home/prodapi/";
+$main_config["site_home_path_full_dev"] = "/home/uatpgsw/";
 $main_config["routing_rule_length"] = "500";
 $main_config["encr_filename_salt_length"] = "20";
 $main_config["encr_filename_length"] = "45";
@@ -49,6 +51,13 @@ $main_config["minify_javascript_setting"] = "1"; // 0:disabled; 1:enabled;
 $main_config["minify_css_setting"] = "1"; // 0:disabled; 1:enabled;
 $main_config["show_page_load_db_query_info"] = "1"; // 0:No , 1:Yes
 $main_config["check_email_activation_login"] = // yes:check email activation status during login, no:donot check email activation status during login
+$main_config["pg-generated-enc-keys-folder-name"] = "generated-enc-keys/";
+//$main_config["pg-symmetric-encryption-key-filename"] = "pg-xsalsa20-symmetric-encryption.key";
+$main_config["pg-asymmetric-anonymous-encryption-keypair-filename"] = "pg-curve25519-asymmetric-anonymous-encryption-keypair.key";
+$main_config["pg-asymmetric-anonymous-encryption-logs-keypair-filename"] = "pg-curve25519-asymmetric-anonymous-encryption-logs-keypair.key";
+$main_config["pg-asymmetric-authentication-keypair-filename"] = "pg-ed25519-asymmetric-authentication-keypair.key";
+$main_config["pg-asymmetric-authentication-logs-keypair-filename"] = "pg-ed25519-asymmetric-authentication-logs-keypair.key";
+//$main_config["pg-symmetric-encryption-key-signature-filename"] = "pg-xsalsa20-symmetric-encryption-key-signature.key";
 
  
 //variables
@@ -71,6 +80,10 @@ $siteroot_basedir = $main_config["siteroot_basedir"];
 //document root for command line:
 $siteroot_basedir_command_line = $main_config["siteroot_basedir_command_line"];
 $siteroot_basedir_command_line_dev = $main_config["siteroot_basedir_command_line_dev"];
+
+//site home path
+$site_home_path_full = $main_config["site_home_path_full"];
+$site_home_path_full_dev = $main_config["site_home_path_full_dev"];
 
 //route/request_uri length
 $routing_rule_length = $main_config["routing_rule_length"];
@@ -142,6 +155,16 @@ $show_page_load_db_query_info = $main_config["show_page_load_db_query_info"]; //
 $check_email_activation_login = $main_config["check_email_activation_login"]; // yes:check email activation status during login, no:donot check email activation status during login
 
 
+//Encryption Keys config
+$pg_generated_enc_keys_folder_name = $main_config["pg-generated-enc-keys-folder-name"];
+//$pg_symmetric_encryption_key_filename = $main_config["pg-symmetric-encryption-key-filename"];
+$pg_asymmetric_anonymous_encryption_keypair_filename = $main_config["pg-asymmetric-anonymous-encryption-keypair-filename"];
+$pg_asymmetric_anonymous_encryption_logs_keypair_filename = $main_config["pg-asymmetric-anonymous-encryption-logs-keypair-filename"];
+$pg_asymmetric_authentication_keypair_filename = $main_config["pg-asymmetric-authentication-keypair-filename"];
+//$pg_symmetric_encryption_key_signature_filename = $main_config["pg-symmetric-encryption-key-signature-filename"];
+$pg_asymmetric_authentication_logs_keypair_filename = $main_config["pg-asymmetric-authentication-logs-keypair-filename"];
+
+
 //activation email sender info
 $activation_email_sender_name = $live_url_main_domain_name . " User Registration";
 $activation_email_sender_email = "register-notification@" . $live_url_main_domain_name;
@@ -169,5 +192,13 @@ $page_content_file_config = array(
                                   'elements'=>'p, a, b, strong, i, em, li, ol, ul, table, tr, td, img, h1, h2, h3, h4, h5, h6, hr, br, section, div', // only the indicated HTML tags get through
                                   'deny_attribute'=>'class, id, style' // None of the allowed elements can have these attributes
                                   );
+
+// Configuration for ea-logger library
+$loggerConfig = array(
+                "email-receivers" => array("raghuveer@easeapp.org", "pradeep@easeapp.org"), //Add Email IDs of Webmaster / Developers
+                "sms-receivers" => array("9999999999", "8888888888"), //Add Mobile Numbers of Webmaster / Developers
+                "severity" => array());
+
+$siteLogPath = "../easeapp-logs/";
 
 ?>

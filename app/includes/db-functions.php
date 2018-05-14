@@ -13,6 +13,8 @@ if (defined('STDIN') ) {
  * @website  http://www.easeapp.org
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
  * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri and other contributors
+ *
+ * These are set of functions. to handle DB Queries.
  */
 
 //Basic DB Functions

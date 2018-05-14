@@ -23,19 +23,90 @@ if ((stripos($file_directory_path, $cli_dev_account_ref)) !== false) {
   $dbconnection_active = "dev";
   $var = "dev";
   $siteroot_basedir_cli = $siteroot_basedir_command_line_dev;
+  
+  $site_basedir_path = $siteroot_basedir_command_line_dev;
+  
+  $site_home_path = $site_home_path_full_dev;
+  
 } elseif ((stripos($file_directory_path, $cli_live_account_ref)) !== false) {
   $dbconnection_active = "live";
   $var = "live";
   $siteroot_basedir_cli = $siteroot_basedir_command_line;
+  
+  $site_basedir_path = $siteroot_basedir_command_line;
+  
+  $site_home_path = $site_home_path_full;
+  
 }
 
 
 include(dirname(dirname(__FILE__)) . "/class/PDOEx.php");
 include(dirname(dirname(__FILE__)) . "/core/db-connect-main.php");
+include(dirname(dirname(__FILE__)) . "/class/Logger.php");
+include(dirname(dirname(__FILE__)) . "/class/DBManager.php");
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/validate-sanitize-functions.php");
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/date-functions.php");
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/db-functions.php");
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/other-functions.php");
+
+include(dirname(dirname(dirname(__FILE__))) . "/app/includes/uuid.php");
+
+//PHPMailer Library: This is to send Email through SMTP / Sendmail in PHP Scripts
+include(dirname(dirname(dirname(__FILE__))) . "/app/includes/phpmailer-v602/src/PHPMailer.php");
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+$phpmailer_sendmail = new PHPMailer(true); // the true param means it will throw exceptions on errors, which we need to catch
+$phpmailer_sendmail->IsSendmail(); // telling the class to use SendMail transport
+$phpmailer_sendmail->CharSet="utf-8";
+
+//This hosts any miscellaneous set of functions that are useful and that do not fit elsewhere
+include(dirname(dirname(dirname(__FILE__))) . "/app/includes/misc-functions.php");
+
+//echo"halite library to be included\n";
+if ((version_compare(PHP_VERSION, '5.6.0') >= 0) && (version_compare(PHP_VERSION, '7.0.0') == -1)) {
+	//echo "5.6.0 to 7.0.0\n";
+	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/halite-v150/halite-v150-includes-commandline.php");
+} else if ((version_compare(PHP_VERSION, '7.0.0') >= 0) && (version_compare(PHP_VERSION, '7.2.0') == -1)) {	
+	//echo "7.0.0 to 7.2.0 \n";
+	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/halite-v320/halite-v320-includes-commandline.php");
+} else if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
+	//echo "> = php 7.2.0 \n";
+	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/constant-time-encoding-v20/constant-time-encoding-v20-includes-commandline.php");
+	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/halite-v402/halite-v402-includes-commandline.php");
+}	
+
+
+
+	/*//Retrieve the previous saved Symmetric Encryption key from the file
+	$pg_symmetric_encryption_key = \ParagonIE\Halite\KeyFactory::loadEncryptionKey($site_home_path . $pg_generated_enc_keys_folder_name. $pg_symmetric_encryption_key_filename);*/
+
+	//Retrieve the previous saved Asymmetric Anonymous Encryption key from the file
+	$pg_asymmetric_anonymous_encryption_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_keypair_filename);
+
+	$pg_asymmetric_anonymous_encryption_secret_key = $pg_asymmetric_anonymous_encryption_keypair->getSecretKey();
+	$pg_asymmetric_anonymous_encryption_public_key = $pg_asymmetric_anonymous_encryption_keypair->getPublicKey();
+
+	//Retrieve the previous saved Asymmetric Anonymous Encryption key for Logs from the file
+	$pg_asymmetric_anonymous_encryption_logs_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_logs_keypair_filename);
+
+	$pg_asymmetric_anonymous_encryption_logs_secret_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getSecretKey();
+	$pg_asymmetric_anonymous_encryption_logs_public_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getPublicKey();
+
+	//Retrieve the previous saved Asymmetric Authentication key from the file
+	$pg_asymmetric_authentication_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_keypair_filename);
+
+	$pg_asymmetric_authentication_secret_key = $pg_asymmetric_authentication_keypair->getSecretKey();
+	$pg_asymmetric_authentication_public_key = $pg_asymmetric_authentication_keypair->getPublicKey();
+	
+	//Retrieve the previous saved Asymmetric Authentication key for Logs from the file
+	$pg_asymmetric_authentication_logs_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_logs_keypair_filename);
+
+	$pg_asymmetric_authentication_logs_secret_key = $pg_asymmetric_authentication_logs_keypair->getSecretKey();
+	$pg_asymmetric_authentication_logs_public_key = $pg_asymmetric_authentication_logs_keypair->getPublicKey();
+
+
 
 
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/other-functions-api.php");
@@ -60,5 +131,15 @@ ini_set("max_execution_time","18000");
 ignore_user_abort(2); 
 //echo "\n dbconnection_active  = ".$dbconnection_active;
 define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+
+
+$siteLogPath = dirname(dirname(dirname(__FILE__))) . "/easeapp-logs/";
+
+//Include a Custome Halite Operation
+include(dirname(dirname(dirname(__FILE__))) . "/app/class/EAHalite.php");
+$objEAHalite = new EAHalite();
+
+$db = new DB();
+
 
 ?>

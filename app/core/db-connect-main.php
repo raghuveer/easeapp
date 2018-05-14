@@ -33,6 +33,8 @@
     $dbname_site = "";	
     
     }
+	
+
     //http://forums.devshed.com/php-faqs-stickies-167/properly-access-mysql-database-php-954131.html        
     if(($dbconnection_active != "") && (($dbconnection_active == "dev") || ($dbconnection_active == "live")))
     {
