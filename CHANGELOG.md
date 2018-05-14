@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 
-## [3.0.0] - 2018-04-02
+## [3.0.0] - 2018-05-14
 ### Added
 - "PHP v7.2", is fully supported.
 - "RBAC related DB Tables", added in this release.
