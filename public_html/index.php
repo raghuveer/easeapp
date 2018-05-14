@@ -204,7 +204,7 @@ include "../app/includes/misc-functions.php";
 
 
 //Check the installed versions of Libsodium
-echo "<br>var_dump result<br>";
+/*echo "<br>var_dump result<br>";
 var_dump([
     SODIUM_LIBRARY_MAJOR_VERSION,
     SODIUM_LIBRARY_MINOR_VERSION,
@@ -215,80 +215,10 @@ print_r([
     SODIUM_LIBRARY_MAJOR_VERSION,
     SODIUM_LIBRARY_MINOR_VERSION,
     SODIUM_LIBRARY_VERSION
-]);
+]);*/
 //echo "<br><hr><br><pre>";
 
-
-//if ((version_compare(PHP_VERSION, '5.6.0') >= 0) && (version_compare(PHP_VERSION, '7.0.0') == -1)) {
-if ((version_compare(PHP_VERSION, '5.6.0') >= 0) && (version_compare(PHP_VERSION, '7.0.0') == -1)) {	
-    //echo 'I am between PHP version 5.6.0 and PHP version 7.0.0, my version: ' . PHP_VERSION . "\n";
-	//This is applicable for PHP Versions between v5.6.0 and v7.0.0
-	
-        include "../app/includes/halite-v150/halite-v150-includes.php";
-
-
-	/*//Retrieve the previous saved Symmetric Encryption key from the file
-	$pg_symmetric_encryption_key = \ParagonIE\Halite\KeyFactory::loadEncryptionKey($site_home_path . $pg_generated_enc_keys_folder_name. $pg_symmetric_encryption_key_filename);*/
-
-	//Retrieve the previous saved Asymmetric Anonymous Encryption key from the file
-	$pg_asymmetric_anonymous_encryption_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_keypair_filename);
-
-	$pg_asymmetric_anonymous_encryption_secret_key = $pg_asymmetric_anonymous_encryption_keypair->getSecretKey();
-	$pg_asymmetric_anonymous_encryption_public_key = $pg_asymmetric_anonymous_encryption_keypair->getPublicKey();
-	
-	//Retrieve the previous saved Asymmetric Anonymous Encryption key for Logs from the file
-	$pg_asymmetric_anonymous_encryption_logs_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_logs_keypair_filename);
-
-	$pg_asymmetric_anonymous_encryption_logs_secret_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getSecretKey();
-	$pg_asymmetric_anonymous_encryption_logs_public_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getPublicKey();
-
-	//Retrieve the previous saved Asymmetric Authentication key from the file
-	$pg_asymmetric_authentication_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_keypair_filename);
-
-	$pg_asymmetric_authentication_secret_key = $pg_asymmetric_authentication_keypair->getSecretKey();
-	$pg_asymmetric_authentication_public_key = $pg_asymmetric_authentication_keypair->getPublicKey();
-	
-	//Retrieve the previous saved Asymmetric Authentication key for Logs from the file
-	$pg_asymmetric_authentication_logs_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_logs_keypair_filename);
-
-	$pg_asymmetric_authentication_logs_secret_key = $pg_asymmetric_authentication_logs_keypair->getSecretKey();
-	$pg_asymmetric_authentication_logs_public_key = $pg_asymmetric_authentication_logs_keypair->getPublicKey();
-
-	
-} else if ((version_compare(PHP_VERSION, '7.0.0') >= 0) && (version_compare(PHP_VERSION, '7.2.0') == -1)) {	
-	//echo 'I am between PHP version 7.0.0 and PHP version 7.2.0, my version: ' . PHP_VERSION . "\n";
-	//This is applicable for PHP Versions between v7.0.0 and v7.2.0
-	
-        include "../app/includes/halite-v320/halite-v320-includes.php";
-
-
-	/*//Retrieve the previous saved Symmetric Encryption key from the file
-	$pg_symmetric_encryption_key = \ParagonIE\Halite\KeyFactory::loadEncryptionKey($site_home_path . $pg_generated_enc_keys_folder_name. $pg_symmetric_encryption_key_filename);*/
-
-	//Retrieve the previous saved Asymmetric Anonymous Encryption key from the file
-	$pg_asymmetric_anonymous_encryption_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_keypair_filename);
-
-	$pg_asymmetric_anonymous_encryption_secret_key = $pg_asymmetric_anonymous_encryption_keypair->getSecretKey();
-	$pg_asymmetric_anonymous_encryption_public_key = $pg_asymmetric_anonymous_encryption_keypair->getPublicKey();
-	
-	//Retrieve the previous saved Asymmetric Anonymous Encryption key for Logs from the file
-	$pg_asymmetric_anonymous_encryption_logs_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_logs_keypair_filename);
-
-	$pg_asymmetric_anonymous_encryption_logs_secret_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getSecretKey();
-	$pg_asymmetric_anonymous_encryption_logs_public_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getPublicKey();
-
-	//Retrieve the previous saved Asymmetric Authentication key from the file
-	$pg_asymmetric_authentication_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_keypair_filename);
-
-	$pg_asymmetric_authentication_secret_key = $pg_asymmetric_authentication_keypair->getSecretKey();
-	$pg_asymmetric_authentication_public_key = $pg_asymmetric_authentication_keypair->getPublicKey();
-	
-	//Retrieve the previous saved Asymmetric Authentication key for Logs from the file
-	$pg_asymmetric_authentication_logs_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_logs_keypair_filename);
-
-	$pg_asymmetric_authentication_logs_secret_key = $pg_asymmetric_authentication_logs_keypair->getSecretKey();
-	$pg_asymmetric_authentication_logs_public_key = $pg_asymmetric_authentication_logs_keypair->getPublicKey();
-} else if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
+if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
     //echo 'I am at least PHP version 7.2.0, my version: ' . PHP_VERSION . "\n<br><br>";
 	//This is applicable for PHP Versions equal to or above v7.2.0
 		//Include Constant Time Encoding Library v2.0 from Paragonie

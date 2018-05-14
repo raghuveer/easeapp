@@ -65,13 +65,7 @@ $phpmailer_sendmail->CharSet="utf-8";
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/misc-functions.php");
 
 //echo"halite library to be included\n";
-if ((version_compare(PHP_VERSION, '5.6.0') >= 0) && (version_compare(PHP_VERSION, '7.0.0') == -1)) {
-	//echo "5.6.0 to 7.0.0\n";
-	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/halite-v150/halite-v150-includes-commandline.php");
-} else if ((version_compare(PHP_VERSION, '7.0.0') >= 0) && (version_compare(PHP_VERSION, '7.2.0') == -1)) {	
-	//echo "7.0.0 to 7.2.0 \n";
-	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/halite-v320/halite-v320-includes-commandline.php");
-} else if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
+if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
 	//echo "> = php 7.2.0 \n";
 	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/constant-time-encoding-v20/constant-time-encoding-v20-includes-commandline.php");
 	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/halite-v402/halite-v402-includes-commandline.php");
