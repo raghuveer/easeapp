@@ -24,6 +24,8 @@ This provides an abstraction to manage preset Cron Jobs, right from the applicat
 ### About Encryption Support:
 There is application level Encryption Support, with the support of Libsodium, that allows to use several Encryption / Digital Signature algorithms, in the Elliptical Cryptography (ECC) range, in the application.
 
+This works with Libsodium v1.0.15 and above, on PHP v7.2.0 and later. The Cryptographic Library will gracefully not load, when PHP Version is either below v7.2.0 and / or if Libsodium has any potential setup issues.
+
 
 ### How to Create Routing Engine Rules, on Easeapp:
 
