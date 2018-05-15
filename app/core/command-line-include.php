@@ -64,41 +64,72 @@ $phpmailer_sendmail->CharSet="utf-8";
 //This hosts any miscellaneous set of functions that are useful and that do not fit elsewhere
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/misc-functions.php");
 
-//echo"halite library to be included\n";
+
 if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
-	//echo "> = php 7.2.0 \n";
+	//echo 'I am at least PHP version 7.2.0, my version: ' . PHP_VERSION . "\n<br><br>";
+	//Include Constant Time Encoding Library v2.0 from Paragonie
 	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/constant-time-encoding-v20/constant-time-encoding-v20-includes-commandline.php");
-	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/halite-v402/halite-v402-includes-commandline.php");
-}	
-
-
-
-	/*//Retrieve the previous saved Symmetric Encryption key from the file
-	$pg_symmetric_encryption_key = \ParagonIE\Halite\KeyFactory::loadEncryptionKey($site_home_path . $pg_generated_enc_keys_folder_name. $pg_symmetric_encryption_key_filename);*/
-
-	//Retrieve the previous saved Asymmetric Anonymous Encryption key from the file
-	$pg_asymmetric_anonymous_encryption_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_keypair_filename);
-
-	$pg_asymmetric_anonymous_encryption_secret_key = $pg_asymmetric_anonymous_encryption_keypair->getSecretKey();
-	$pg_asymmetric_anonymous_encryption_public_key = $pg_asymmetric_anonymous_encryption_keypair->getPublicKey();
-
-	//Retrieve the previous saved Asymmetric Anonymous Encryption key for Logs from the file
-	$pg_asymmetric_anonymous_encryption_logs_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_logs_keypair_filename);
-
-	$pg_asymmetric_anonymous_encryption_logs_secret_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getSecretKey();
-	$pg_asymmetric_anonymous_encryption_logs_public_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getPublicKey();
-
-	//Retrieve the previous saved Asymmetric Authentication key from the file
-	$pg_asymmetric_authentication_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_keypair_filename);
-
-	$pg_asymmetric_authentication_secret_key = $pg_asymmetric_authentication_keypair->getSecretKey();
-	$pg_asymmetric_authentication_public_key = $pg_asymmetric_authentication_keypair->getPublicKey();
+	//Include Halite Library from Paragonie
+	//include(dirname(dirname(dirname(__FILE__))) . "/app/includes/halite-v402/halite-v402-includes-commandline.php");
+	include(dirname(dirname(dirname(__FILE__))) . "/app/includes/halite-v441/halite-v441-includes-commandline.php");
 	
-	//Retrieve the previous saved Asymmetric Authentication key for Logs from the file
-	$pg_asymmetric_authentication_logs_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_logs_keypair_filename);
+	
+	/*//Check if Libsodium is setup correctly, result will be bool(true), if all is good, https://stackoverflow.com/a/37687595
+	//var_dump(ParagonIE\Halite\Halite::isLibsodiumSetupCorrectly());
+	//echo ParagonIE\Halite\Halite::isLibsodiumSetupCorrectly(true);	
+	//echo "<br><br>";
+	//Check the installed versions of Libsodium
+	echo "<br>var_dump result<br>";
+	var_dump([
+		SODIUM_LIBRARY_MAJOR_VERSION,
+		SODIUM_LIBRARY_MINOR_VERSION,
+		SODIUM_LIBRARY_VERSION
+	]);
+	echo "<br>print_r result<br>";
+	print_r([
+		SODIUM_LIBRARY_MAJOR_VERSION,
+		SODIUM_LIBRARY_MINOR_VERSION,
+		SODIUM_LIBRARY_VERSION
+	]);
+	echo "<br><hr><br><pre>";
+	*/
 
-	$pg_asymmetric_authentication_logs_secret_key = $pg_asymmetric_authentication_logs_keypair->getSecretKey();
-	$pg_asymmetric_authentication_logs_public_key = $pg_asymmetric_authentication_logs_keypair->getPublicKey();
+	
+	//Check, if Libsodium is setup correctly
+	if (ParagonIE\Halite\Halite::isLibsodiumSetupCorrectly() === true) {
+		//echo "true<br>";
+		/*//Retrieve the previous saved Symmetric Encryption key from the file
+		$pg_symmetric_encryption_key = \ParagonIE\Halite\KeyFactory::loadEncryptionKey($site_home_path . $pg_generated_enc_keys_folder_name. $pg_symmetric_encryption_key_filename);*/
+
+		//Retrieve the previous saved Asymmetric Anonymous Encryption key from the file
+		$pg_asymmetric_anonymous_encryption_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_keypair_filename);
+
+		$pg_asymmetric_anonymous_encryption_secret_key = $pg_asymmetric_anonymous_encryption_keypair->getSecretKey();
+		$pg_asymmetric_anonymous_encryption_public_key = $pg_asymmetric_anonymous_encryption_keypair->getPublicKey();
+		
+		//Retrieve the previous saved Asymmetric Anonymous Encryption key for Logs from the file
+		$pg_asymmetric_anonymous_encryption_logs_keypair = \ParagonIE\Halite\KeyFactory::loadEncryptionKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_anonymous_encryption_logs_keypair_filename);
+
+		$pg_asymmetric_anonymous_encryption_logs_secret_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getSecretKey();
+		$pg_asymmetric_anonymous_encryption_logs_public_key = $pg_asymmetric_anonymous_encryption_logs_keypair->getPublicKey();
+
+		//Retrieve the previous saved Asymmetric Authentication key from the file
+		$pg_asymmetric_authentication_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_keypair_filename);
+
+		$pg_asymmetric_authentication_secret_key = $pg_asymmetric_authentication_keypair->getSecretKey();
+		$pg_asymmetric_authentication_public_key = $pg_asymmetric_authentication_keypair->getPublicKey();
+		
+		//Retrieve the previous saved Asymmetric Authentication key for Logs from the file
+		$pg_asymmetric_authentication_logs_keypair = \ParagonIE\Halite\KeyFactory::loadSignatureKeyPair($site_home_path . $pg_generated_enc_keys_folder_name. $pg_asymmetric_authentication_logs_keypair_filename);
+
+		$pg_asymmetric_authentication_logs_secret_key = $pg_asymmetric_authentication_logs_keypair->getSecretKey();
+		$pg_asymmetric_authentication_logs_public_key = $pg_asymmetric_authentication_logs_keypair->getPublicKey();
+	}//close of if (ParagonIE\Halite\Halite::isLibsodiumSetupCorrectly() === true) {
+	
+
+}//close of if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
+
+
 
 
 

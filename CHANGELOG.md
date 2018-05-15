@@ -6,9 +6,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+
+## [3.2.0] - 2018-05-15
+### Added
+- "Halite v4.41", is added in this release. Checks are included to gracefully not load Halite Library, when errors happen with Libsodium.
+
+
+### Removed
+- "Halite v4.01", is removed.
+
+
 ## [3.1.0] - 2018-05-14
 ### Removed
-- "Cryptographic Libraries", Old Versions Support is removed, due to non-compatibility of Libsodium, with old PHP Versions.
+- "Cryptographic Libraries", Old Versions Support is removed, due to non-compatibility / installation issues w.r.t. Libsodium and old PHP Versions (< PHP v7.2.0) respectively.
 
 
 ## [3.0.0] - 2018-05-14
@@ -17,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - "RBAC related DB Tables", added in this release.
 - "Virtual Cron Management", related DB Table is added in this release.
 - "Comprehensive Encryption Support", based on Libsodium, that includes latest Symmetric / Asymmetric Encryption libraries support, in the framework.
+- "Constant Time Encoding v2.0", is added in this release.
 - "PHPMailer", v6.02 is added in this release.
 - "UUID", Class is added in this release.
 - "DBManager", Class, by Mr.Pradeep Ganapathy (Pradeep Ganapathy <bu.pradeep@gmail.com>) is added in this release.
