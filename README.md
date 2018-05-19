@@ -9,7 +9,7 @@ Easeapp is based on Single Controller Pattern / Front Controller Pattern, that h
 3. Ajax Calls etc...
 
 <u>Note:</u> A different route, have to be uniquely defined for web page url / Ajax Call / REST API Endpoint. In scenarios, multiple routes can point to same file. All routes can be explicitly restricted to support a single method (GET / POST / PUT / DELETE etc) or leave it, as is, to work, on any Request Method.
- 
+
 This framework is a simple tool, that facilitates the Developer with a very simple base, in terms of MVC, while allowing them to code in either procedural / object oriented approaches.
 
 ### About Database:
@@ -30,7 +30,7 @@ This works with Libsodium v1.0.15 and above, on PHP v7.2.0 and later. The Crypto
 ### How to Create Routing Engine Rules, on Easeapp:
 
  **I. Some different combinations and related meanings (this is to differentiate whether the page is a frontend page or a admin panel page or related to Ajax / API Service):**
- 
+
  1) **"is_ajax" => "0", "is_frontend_page" => "0"**
  This means, http request is normal (not ajax) and admin panel template has to be loaded
 
@@ -55,33 +55,33 @@ This works with Libsodium v1.0.15 and above, on PHP v7.2.0 and later. The Crypto
  This means, http request is basically not an ajax request
   
 
- 
- 
+
+
  **II. This is to check the Request Method of the request:**
- 
+
  1) **"request_method" => "ANY"**
  This means, there is no restriction about the METHOD that is used for this http / https request (GET / POST / PUT / DELETE all works), if the VALUE is ANY.
- 
+
  2) **"request_method" => "GET"**
  This means, only requests that is initiated using GET METHOD are allowed, if the VALUE is GET.
- 
+
  3) **"request_method" => "POST"**
  This means, only requests that is initiated using POST METHOD are allowed, if the VALUE is POST.
- 
+
  4) **"request_method" => "PUT"**
  This means, only requests that is initiated using PUT METHOD are allowed, if the VALUE is PUT.
- 
+
  5) **"request_method" => "DELETE"**
  This means, only requests that is initiated using DELETE METHOD are allowed, if the VALUE is DELETE.
- 
+
  6) **"request_method" => "HEAD" (NOT COMPLETED)**
  This means, only requests that is initiated using HEAD METHOD are allowed, if the VALUE is HEAD. The Script will be terminated after outputting headers if output buffering is not enabled.
- 
+
 
  <u>Example Routes:</u>
- 
+
  1) The following is the Default Route for Web Application
- 
+
     ```php
 	$routes["default-home"] = array("route_value" => "/",
 							  "route_var_count" => "2",
@@ -94,7 +94,7 @@ This works with Libsodium v1.0.15 and above, on PHP v7.2.0 and later. The Crypto
 	```
 
 2) The following is the Route for Ajax Call
- 
+
     ```php
 	$routes["admin-panel-user-add-choose-type"] = array("route_value" => "/admin-panel/user/add/choose-type",
 								 "route_var_count" => "5",
@@ -103,11 +103,11 @@ This works with Libsodium v1.0.15 and above, on PHP v7.2.0 and later. The Crypto
 						         "is_web_service_endpoint" => "0",
 								 "is_frontend_page" => "3",
 								 "request_method" => "ANY"                                    
-								); 
-	```	
-					   
+								);
+	```
+
 3) The following is the Route for REST Web Service
- 
+
     ```php
 	$routes["rest-login"] = array("route_value" => "/rest/login",
 							 "route_var_count" => "3",
@@ -116,9 +116,8 @@ This works with Libsodium v1.0.15 and above, on PHP v7.2.0 and later. The Crypto
                              "is_web_service_endpoint" => "1",
 							 "is_frontend_page" => "3",
                              "request_method" => "POST"                                    
-							);	
-	```	
-	
+							);
+	```
+
 # License
 The Easeapp PHP framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT "MIT License").
-	

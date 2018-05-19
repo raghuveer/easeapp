@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - "Virtual Cron Management", related DB Table is added in this release.
 - "Comprehensive Encryption Support", based on Libsodium, that includes latest Symmetric / Asymmetric Encryption libraries support, in the framework.
 - "Constant Time Encoding v2.0", is added in this release.
-- "PHPMailer", v6.02 is added in this release.
+- "PHPMailer v6.02", is added in this release.
 - "UUID", Class is added in this release.
 - "DBManager", Class, by Mr.Pradeep Ganapathy (Pradeep Ganapathy <bu.pradeep@gmail.com>) is added in this release.
 - "Halite", Class, by Mr.Pradeep Ganapathy (Pradeep Ganapathy <bu.pradeep@gmail.com>) is added in this release.
@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ### Removed
-- "PHPmailer"  v5.27 is removed.
+- "PHPmailer v5.27", is removed.
 - "PHPExcel" library is removed, as it is Deprecated.
 
 
