@@ -45,15 +45,15 @@ This works with Libsodium v1.0.15 and above, on PHP v7.2.0 and later. The Crypto
 
  5) **"is_ajax" => "1", "is_frontend_page" => "3"**
  This means, http request is an ajax request and this represents, pure ajax call/web service endpoint
- a) "is_web_service_endpoint" => "0"
- This means, http request is an ajax request and this represents, pure ajax call
- b) "is_web_service_endpoint" => "1"
- This means, http request is an ajax request and this represents, web service endpoint
- c) "is_web_service_endpoint" => "2"
- This means, http request is an ajax request and this represents, either ajax call or web service endpoint
- d) "is_web_service_endpoint" => "3"
- This means, http request is basically not an ajax request
-  
+   a) "is_web_service_endpoint" => "0"
+   This means, http request is an ajax request and this represents, pure ajax call
+   b) "is_web_service_endpoint" => "1"
+   This means, http request is an ajax request and this represents, web service endpoint
+   c) "is_web_service_endpoint" => "2"
+   This means, http request is an ajax request and this represents, either ajax call or web service endpoint
+   d) "is_web_service_endpoint" => "3"
+   This means, http request is basically not an ajax request
+
 
 
 
@@ -120,4 +120,4 @@ This works with Libsodium v1.0.15 and above, on PHP v7.2.0 and later. The Crypto
 	```
 
 # License
-The Easeapp PHP framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT "MIT License").
+The Easeapp PHP framework is open-sourced software, that is licensed under the [MIT license](https://opensource.org/licenses/MIT "MIT License").
