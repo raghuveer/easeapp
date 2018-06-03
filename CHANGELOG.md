@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.3.0] - 2018-06-03
+### Added
+- "Additional Session Backends", i.e. Single Redis Server, is supported in this release with corresponding Config options.
+- "Specific Session Settings", are added, to stay in sync with PHP v7.2 and later.
+
+
+### Removed
+- "Specific Session Settings", are removed, to stay in sync with PHP v7.2 and later. More info can be checked, by referring in the /index.php file, for removed Session Settings, that are removed before PHP v7.2.
+
 
 ## [3.2.0] - 2018-05-15
 ### Added

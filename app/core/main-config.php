@@ -58,7 +58,11 @@ $main_config["pg-asymmetric-anonymous-encryption-logs-keypair-filename"] = "pg-c
 $main_config["pg-asymmetric-authentication-keypair-filename"] = "pg-ed25519-asymmetric-authentication-keypair.key";
 $main_config["pg-asymmetric-authentication-logs-keypair-filename"] = "pg-ed25519-asymmetric-authentication-logs-keypair.key";
 //$main_config["pg-symmetric-encryption-key-signature-filename"] = "pg-xsalsa20-symmetric-encryption-key-signature.key";
-
+$main_config["active_session_backend"] = "files"; // files: File system based sessions, redis: Single Redis Server, default value: file
+$main_config["files_based_session_storage_location_choice"] = "custom-location"; // default-location: Default File System based Session Storage Location, as per PHP Settings, custom-location: User Chosen File System based Session Storage Location, default value: custom-location
+$main_config["files_based_session_storage_custom_path"] = dirname($_SERVER['DOCUMENT_ROOT']) . "/sessions"; // User Chosen File System based Custom Session Storage Location
+$main_config["single_redis_server_session_backend_host"] = "tcp://localhost:6379"; // Details of single redis server related session storage host details
+$main_config["session_max_lifetime_bef_cleanup"] = "86400"; // value of session.gc_maxlifetime php setting
  
 //variables
 $site_config_site_name = $main_config["site_config_site_name"];
@@ -164,6 +168,12 @@ $pg_asymmetric_authentication_keypair_filename = $main_config["pg-asymmetric-aut
 //$pg_symmetric_encryption_key_signature_filename = $main_config["pg-symmetric-encryption-key-signature-filename"];
 $pg_asymmetric_authentication_logs_keypair_filename = $main_config["pg-asymmetric-authentication-logs-keypair-filename"];
 
+//session Backend Options
+$active_session_backend = $main_config["active_session_backend"];
+$files_based_session_storage_location_choice = $main_config["files_based_session_storage_location_choice"];
+$files_based_session_storage_custom_path = $main_config["files_based_session_storage_custom_path"];
+$single_redis_server_session_backend_host = $main_config["single_redis_server_session_backend_host"];
+$session_max_lifetime_bef_cleanup = (int) $main_config["session_max_lifetime_bef_cleanup"];
 
 //activation email sender info
 $activation_email_sender_name = $live_url_main_domain_name . " User Registration";

@@ -49,14 +49,14 @@ class Logger{
      */
     public function log($msg, $severity = 0){ 
         global $current_epoch;
-        $datetime = df_convert_unix_timestamp_to_datetime_custom_timezone($current_epoch);		        
+        $datetime = df_convert_unix_timestamp_to_datetime_custom_timezone($current_epoch, "Asia/Kolkata");		        
         $logMsg = "\n".$severity. ":: ".$datetime ." :: " . $msg;		
         file_put_contents($this->logfile , $logMsg, FILE_APPEND);
     }
     
     public function logNewSeperator(){ 
         global $current_epoch;
-        $datetime = df_convert_unix_timestamp_to_datetime_custom_timezone($current_epoch);		        
+        $datetime = df_convert_unix_timestamp_to_datetime_custom_timezone($current_epoch, "Asia/Kolkata");		        
         $logMsg = "\n0:: ".$datetime ." :: ------------------------- ";		
         file_put_contents($this->logfile , $logMsg, FILE_APPEND);
     }

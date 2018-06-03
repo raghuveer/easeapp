@@ -26,6 +26,8 @@ There is application level Encryption Support, with the support of Libsodium, th
 
 This works with Libsodium v1.0.15 and above, on PHP v7.2.0 and later. The Cryptographic Library will gracefully not load, when PHP Version is either below v7.2.0 and / or if Libsodium has any potential setup issues.
 
+### About Additional Session Backends:
+In addition to default Session Backend, i.e., Files, Redis (Single Redis instance, to start with), is being supported as additional Session Backend. But, to use Redis as Session Backend, Redis has to be installed in the server and corresponding PECL Redis Extension have to be installed and enabled in the server. The Config can be chosen in main config file thereafter.
 
 ### How to Create Routing Engine Rules, on Easeapp:
 

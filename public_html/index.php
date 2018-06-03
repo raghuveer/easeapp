@@ -30,36 +30,7 @@ header('X-Frame-Options: DENY');
 header_remove('x-powered-by');
 //to allow flash to share client side data between its applications in php
 header('X-Permitted-Cross-Domain-Policies: master-only');
-// **PREVENTING SESSION HIJACKING**
-// Prevents javascript XSS attacks aimed to steal the session ID
-ini_set('session.cookie_httponly', 1);
-// Uses a secure connection (HTTPS) to send cookies on https. (This has to be defined when ssl certificate is installed on the domain name and https is enabled for the hostname, otherwise, session variables will be cleared and made empty after the redirect).
-//ini_set('session.cookie_secure', 1);
-ini_set('session.cookie_lifetime', 0); 
-ini_set('session.entropy_file', '/dev/urandom');
-ini_set('session.entropy_length', 512);
-ini_set('session.hash_function', 'whirlpool'); //is whirlpool that necessary?
-// **PREVENTING SESSION FIXATION**
-// Session ID cannot be passed through URLs
-ini_set('session.use_cookies', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.use_trans_sid', 0);
-ini_set('session.hash_bits_per_character', 5);
-//sessions to be stored in "sessions" folder that will be located outside "public_html" folder
-ini_set('session.save_path',dirname($_SERVER['DOCUMENT_ROOT']) . "/sessions");
-ini_set('session.gc_maxlifetime', 7200);
-//enable garbage collection for sessions which will be stored in custom chosen folder that will be placed outside public_html folder
-ini_set('session.gc_probability', 1);
 
-//ini_set('session.referer_check', 0); // not allowing to have an established session
-session_start();
-if ((!isset($_SESSION['loggedin'])) && ($_SESSION['loggedin'] != "yes")) {
-   $_SESSION['loggedin'] = "no";
-   $_SESSION['sm_user_type'] = "";
-} elseif ((isset($_SESSION['loggedin'])) && ($_SESSION['loggedin'] != "yes")) {
-   $_SESSION['loggedin'] = "no";
-   $_SESSION['sm_user_type'] = "";
-}
 //To prevent direct access to a file inside public root or public_html or www folder, 
 define("START", "No Direct Access", true);
 
@@ -76,6 +47,119 @@ define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 include "../app/core/server-var-info.php";
 include "../app/core/main-config.php";
 
+if(function_exists("date_default_timezone_set"))
+{
+//Define the Default timezone.	
+date_default_timezone_set($date_default_timezone_set); // $date_default_timezone_set from /app/core/main-config.php
+}
+
+//HTMLawed Library to purify and filter HTML (http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/)
+include "../app/includes/htmLawed.php"; 
+include "../app/includes/validate-sanitize-functions.php";
+
+// This token is used by forms to prevent cross site forgery attempts
+if (!isset($_SESSION['nonce'])) {
+$_SESSION['nonce'] = create_csrf_nonce($hash_algorithm, "20"); //$hash_algorithm from /app/core/main-config.php
+}
+
+//This does the pre-defined host name, thus observing the host of the script, if it is Dev / Live Environment
+include "../app/core/hostname-check.php";
+
+
+// **PREVENTING SESSION HIJACKING**
+// Prevents javascript XSS attacks aimed to steal the session ID
+ini_set('session.cookie_httponly', 1);
+// Uses a secure connection (HTTPS) to send cookies on https. (This has to be defined when ssl certificate is installed on the domain name and https is enabled for the hostname, otherwise, session variables will be cleared and made empty after the redirect).
+
+if ($site_protocol_name == "https://") {
+	ini_set('session.cookie_secure', 1);//this has to be enabled only on HTTPS
+} else {
+	ini_set('session.cookie_secure', 0);//this has to be enabled only on HTTPS
+}//close of else of if ($site_protocol_name == "https://") {
+
+ini_set('session.cookie_lifetime', 0); 
+//ini_set('session.entropy_file', '/dev/urandom'); //Removed in PHP 7.1.0.
+//ini_set('session.entropy_length', 512); //Removed in PHP 7.1.0
+//ini_set('session.hash_function', 'whirlpool'); //whirlpool as hash function to generate session ids. This setting was introduced in PHP 5. Removed in PHP 7.1.0. 
+// **PREVENTING SESSION FIXATION**
+// Session ID cannot be passed through URLs
+ini_set('session.use_cookies', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.use_trans_sid', 0);
+//ini_set('session.hash_bits_per_character', 5); //Removed in PHP 7.1.0.
+
+//Session Handler and Storage Path Checks
+if ($active_session_backend == "files") {
+	if ($files_based_session_storage_location_choice == "custom-location") {
+		//http://in3.php.net/manual/en/function.mkdir.php
+        //some observations: 0711 or 0755 or may be 0777 for folders work better, in this scenario.
+	    if (!is_dir($files_based_session_storage_custom_path)) {
+	   	
+			mkdir($files_based_session_storage_custom_path, 0755);
+			chmod($files_based_session_storage_custom_path, 0755);
+			clearstatcache();		
+		
+	    } else if (!is_writable($files_based_session_storage_custom_path)) {
+	   	
+			chmod($files_based_session_storage_custom_path, 0755);
+			clearstatcache();		
+		
+	    }//close of else if of if (!is_dir($files_based_session_storage_custom_path)) {
+		
+		//sessions to be stored in "sessions" folder that will be located outside "public_html" folder ($files_based_session_storage_custom_path, as defined in /app/core/main-config.php)
+		ini_set('session.save_path',$files_based_session_storage_custom_path);
+
+	}//Close of if ($files_based_session_storage_location_choice == "custom-location") {
+		
+} else if ($active_session_backend == "redis") {
+	//sessions to be stored in Redis
+	ini_set('session.save_handler', 'redis');
+
+	//sessions to be stored in Redis Path
+	ini_set('session.save_path', $single_redis_server_session_backend_host); // as per /app/core/main-config.php
+}//close of else if of if ($active_session_backend == "files") {
+	
+
+//sessions to be stored in "sessions" folder that will be located outside "public_html" folder
+//ini_set('session.save_path',dirname($_SERVER['DOCUMENT_ROOT']) . "/sessions");
+
+//sessions to be stored in Redis
+//ini_set('session.save_handler', 'redis');
+
+//sessions to be stored in Redis Path
+//ini_set('session.save_path', "tcp://localhost:6379");
+ini_set('session.gc_maxlifetime', $session_max_lifetime_bef_cleanup);
+//ini_set('session.gc_maxlifetime', 86400);
+//enable garbage collection for sessions which will be stored in custom chosen folder that will be placed outside public_html folder
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisor ', 100);
+
+//ini_set('session.referer_check', 0); // Checks for HTTP Referer, and if the defined sub string do not match, then the session id will be marked as invalid. This potentially may not allow to have an established session, in above defined scenario.
+session_start();
+if ((!isset($_SESSION['loggedin'])) && ($_SESSION['loggedin'] != "yes")) {
+   $_SESSION['loggedin'] = "no";
+   $_SESSION['sm_user_type'] = "";
+} elseif ((isset($_SESSION['loggedin'])) && ($_SESSION['loggedin'] != "yes")) {
+   $_SESSION['loggedin'] = "no";
+   $_SESSION['sm_user_type'] = "";
+}
+/*
+//To prevent direct access to a file inside public root or public_html or www folder, 
+define("START", "No Direct Access", true);
+
+//include timer class file and create object
+include "../app/class/Timer.php";
+$load_time1 = new Timer();
+ 
+if ($page_is_ajax != "1") {
+  // calculate the time it takes to run page load time using timer #1 start
+  $load_time1->start();
+}
+
+define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+include "../app/core/server-var-info.php";
+include "../app/core/main-config.php";
+*/
 if ($app_site_status == "construction") {
   echo "<center>This website is under rapid construction sessions, please visit us again, thank you</center>";
   exit;
@@ -99,6 +183,7 @@ elseif($debug_mode == "OFF")
   error_reporting(0);
   //echo "debug mode off";
 }
+/*
 if(function_exists("date_default_timezone_set"))
 {
 //Define the Default timezone.	
@@ -116,7 +201,7 @@ $_SESSION['nonce'] = create_csrf_nonce($hash_algorithm, "20"); //$hash_algorithm
 
 //This does the pre-defined host name, thus observing the host of the script, if it is Dev / Live Environment
 include "../app/core/hostname-check.php";
-
+*/
 //This holds all Session Checking Functions
 include "../app/core/session-check-functions.php";
 
@@ -261,53 +346,55 @@ if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
 
 		$pg_asymmetric_authentication_logs_secret_key = $pg_asymmetric_authentication_logs_keypair->getSecretKey();
 		$pg_asymmetric_authentication_logs_public_key = $pg_asymmetric_authentication_logs_keypair->getPublicKey();
+		
+				
+		/* sample codes start*/
+		/*
+		$message = "1 start";
+
+		$sealed = \ParagonIE\Halite\Asymmetric\Crypto::seal(
+			new ParagonIE\Halite\HiddenString(
+				$message
+			),
+			$pg_asymmetric_anonymous_encryption_public_key
+		);
+		echo "sealed: <br>" . $sealed . "<br><hr><br>";
+
+
+		$opened = \ParagonIE\Halite\Asymmetric\Crypto::unseal(
+			$sealed,
+			$pg_asymmetric_anonymous_encryption_secret_key
+		);
+
+		echo "opened: <br>" . $opened . "<br><hr><br>";
+
+		$signature = \ParagonIE\Halite\Asymmetric\Crypto::sign(
+			$sealed,
+			$pg_asymmetric_authentication_secret_key
+		);
+		echo "signature: <br>" . $signature . "<br><hr><br>";
+
+		$valid = \ParagonIE\Halite\Asymmetric\Crypto::verify(
+			$sealed,
+			$pg_asymmetric_authentication_public_key,
+			$signature
+		);
+		echo "Signature Verification Status: <br>" . $valid . "<br><hr><br>";
+		*/
+		/*sample code end*/
+		//exit;
+
+		
+		
 	}//close of if (ParagonIE\Halite\Halite::isLibsodiumSetupCorrectly() === true) {
 		
 		
 	
 }//close of if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
 
-
-/* sample codes start*/
-
-$message = "1 start";
-
-$sealed = \ParagonIE\Halite\Asymmetric\Crypto::seal(
-    new ParagonIE\Halite\HiddenString(
-        $message
-    ),
-    $pg_asymmetric_anonymous_encryption_public_key
-);
-echo "sealed: <br>" . $sealed . "<br><hr><br>";
-
-
-$opened = \ParagonIE\Halite\Asymmetric\Crypto::unseal(
-    $sealed,
-    $pg_asymmetric_anonymous_encryption_secret_key
-);
-
-echo "opened: <br>" . $opened . "<br><hr><br>";
-
-$signature = \ParagonIE\Halite\Asymmetric\Crypto::sign(
-    $sealed,
-    $pg_asymmetric_authentication_secret_key
-);
-echo "signature: <br>" . $signature . "<br><hr><br>";
-
-$valid = \ParagonIE\Halite\Asymmetric\Crypto::verify(
-    $sealed,
-    $pg_asymmetric_authentication_public_key,
-    $signature
-);
-echo "Signature Verification Status: <br>" . $valid . "<br><hr><br>";
-
-/*sample code end*/
-//exit;
-
 //Include a Custome Halite Operation
 include "../app/class/EAHalite.php";
 $objEAHalite = new EAHalite();
-
 
 $db = new DB();
 
