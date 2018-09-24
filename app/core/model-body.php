@@ -12,7 +12,7 @@
 //Include Modal file (when the loading page is valid) or, include not-found page (when the loading page is not valid)
 
    if($page_filename != "not-found.php") {
-	  include "../app/modal/" . $page_filename;
+	  include "../app/models/" . $page_filename;
    }
 
 ?>

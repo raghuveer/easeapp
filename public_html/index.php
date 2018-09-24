@@ -235,8 +235,11 @@ include "../app/core/routing-engine-rules.php";
 //This is where the user defined routing engine rules are defined
 include "../app/core/routing-engine-user-rules.php";
 
-//This is where the controller lies, that routes the request for the particular virtual resource
-include "../app/core/controller.php";
+//This is where the route specific functions, that handles route parsing, pass request data to models, inject model data in to views and for finally generating the responses
+include "../app/includes/route-functions.php";
+
+//This is where the route parser lies, that routes the request for the particular virtual resource
+include "../app/core/route-parser.php";
 
 //This is a compilation of date related custom functions
 include "../app/includes/date-functions.php";
@@ -451,7 +454,7 @@ if (($page_is_ajax == "1") && ($page_is_frontend == "3")) {
 
 //Web Applications: This does the loading of the Modal Aspect (logic with db interaction) respective resource for regular web application requests 
 if ($page_is_ajax != "1") {
-include "../app/core/modal-body.php";
+include "../app/core/model-body.php";
 }
 // Step 5: Parse the Template
 
