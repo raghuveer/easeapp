@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.6.0] - 2018-11-05
+### Added
+- "JWT Auth Token Functions with HS256 algorithm", is added in this release.
+- "JWT Auth Token related DB Table", is added in this release.
+- "User Authentication and Info functions for REST API", is added in this release.
+### Changed
+- "few DB related files", are renamed.
+- "Copyright notice", is updated.
+
+
 ## [3.4.0] - 2018-09-24
 ### Added
 - "Separate Route Functions", file is added in this release.

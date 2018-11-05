@@ -14,7 +14,7 @@
  * @author   Raghu Veer Dendukuri <raghuveer.d@easeapp.org>
  * @website  http://www.easeapp.org
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
- * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri and other contributors
+ * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or              * Contributors and is licensed as per their Open Source License choices.
  */
   
   $_SERVER['unfiltered'] = $_SERVER;
@@ -27,6 +27,8 @@
   $_SERVER['REMOTE_HOST'] = isset($_SERVER['REMOTE_HOST']) ? filter_var($_SERVER['REMOTE_HOST'], FILTER_SANITIZE_STRING) : '';
   $_SERVER['PHP_SELF'] = isset($_SERVER['PHP_SELF']) ? filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_STRING) : '';
   $_SERVER['DOCUMENT_ROOT'] = isset($_SERVER['DOCUMENT_ROOT']) ? filter_var($_SERVER['DOCUMENT_ROOT'], FILTER_SANITIZE_STRING) : '';
+  $_SERVER['REQUEST_METHOD'] = isset($_SERVER['REQUEST_METHOD']) ? filter_var($_SERVER['REQUEST_METHOD'], FILTER_SANITIZE_STRING) : '';
+  $_SERVER["CONTENT_TYPE"] = isset($_SERVER["CONTENT_TYPE"]) ? filter_var($_SERVER["CONTENT_TYPE"], FILTER_SANITIZE_STRING) : '';
   $curl_useragent_array = array(
     'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)',
     'Mozilla/5.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)',

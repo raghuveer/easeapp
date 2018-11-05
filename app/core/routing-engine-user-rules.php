@@ -1,16 +1,16 @@
 <?php
   defined('START') or die;
-/**
+ /**
  * Easeapp PHP Framework - A Simple MVC based Procedural Framework in PHP 
  *
  * @package  Easeapp
  * @author   Raghu Veer Dendukuri <raghuveer.d@easeapp.org>
  * @website  http://www.easeapp.org
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
- * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri and other contributors
- */  
+ * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or              * Contributors and is licensed as per their Open Source License choices.
+ */ 
  /*
-  * This is to host the user defined routing engine rules
+  * This is to host the core framework related routing engine rules
   * 
   * I. some different combinations and related meanings (this is to differentiate whether the page is a frontend page or a admin panel page or related to Ajax / API Service):
   * 
@@ -28,7 +28,15 @@
   *
   * 5) "is_ajax" => "1", "is_frontend_page" => "3"
   * This means, http request is an ajax request and this represents, pure ajax call/web service call
-  *
+  * a) "is_web_service_endpoint" => "0"
+  * This means, http request is an ajax request and this represents, pure ajax call
+  * b) "is_web_service_endpoint" => "1"
+  * This means, http request is an ajax request and this represents, web service endpoint
+  * c) "is_web_service_endpoint" => "2"
+  * This means, http request is an ajax request and this represents, either ajax call or web service endpoint
+  * d) "is_web_service_endpoint" => "3"
+  * This means, http request is basically not an ajax request
+  *  
   * 
   * 
   * II. This is to check the Request Method of the request
@@ -53,7 +61,8 @@
   *        
   */
 //Different Routing Engine Rules
- $user_defined_routes = array();
+$user_defined_routes = array();
 
-  
+
+							
 ?>

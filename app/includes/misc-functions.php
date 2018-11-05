@@ -13,7 +13,7 @@ if (defined('STDIN') ) {
  * @author   Raghu Veer Dendukuri <raghuveer.d@easeapp.org>
  * @website  http://www.easeapp.org
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
- * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri and other contributors
+ * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or               * Contributors and is licensed as per their Open Source License choices.
  */
  
  
@@ -82,4 +82,98 @@ function clean_excel_file_row_content($excel_file_row_content_input){
 	}
 	return $excel_file_row_content_output;
 }
+
+function ea_create_array_from_http_raw_json_data(){
+	
+	$received_content = array();
+	if ($_SERVER["CONTENT_TYPE"] == "application/json") {
+		
+		$received_content["received_data_array"] = json_decode(file_get_contents('php://input'), true);
+		$received_content["received_content_type"] = "application/json";
+		
+	} else {
+		$received_content["received_data_array"] = array();
+		$received_content["received_content_type"] = $_SERVER["CONTENT_TYPE"];
+		
+	}//close of else of if ($_SERVER["CONTENT_TYPE"] == "application/json") {
+	return $received_content;
+	
+}
+
+function sendPushNotification($notification, $imps_sender_phone){
+	 
+	global $push_notification_realtime_co_app_key, $push_notification_realtime_co_app_private_key, $push_notification_realtime_co_channelname;
+ 
+	$URL = 'http://ortc-developers.realtime.co/server/2.1';
+	$AK = $push_notification_realtime_co_app_key; 
+	$PK = $push_notification_realtime_co_app_private_key;
+	/*$TK = 'wc_drona_app_'.$imps_sender_phone;   // token can be randomly generated
+	$CH = 'wc_drona_app_'.$imps_sender_phone;*/
+	$TK = 'drona_app_'.$imps_sender_phone;   // token can be randomly generated
+	$CH = 'drona_app_'.$imps_sender_phone;
+	 
+	// Authenticating a token with write (w) permissions on myChannel
+	 
+	//if( ! array_key_exists('ortc_token', $_SESSION) ){
+		//$_SESSION['ortc_token'] = $TK;
+		$rt = new Realtime( $URL, $AK, $PK, $TK );
+		$ttl = 180000;
+		$result = $rt->auth(
+			array(
+				$CH => 'w'
+			),
+			0,
+			$ttl
+		);
+		//print '<!-- auth status '.( $result ? 'ok' : 'fail' ).' -->\n';
+	//}
+	 
+	// Send Hello World message
+	$result = $rt->send($CH, $notification, $response);
+	//print '<!-- send status '.( $result ? 'ok' : 'fail' ).' -->\n';
+		
+	if($result){
+		return $response['errcode']." - ".$response['content'];
+	}else{
+		return $response['errcode']." - ".$response['response'][1];
+	}	
+}
+
+function getMaintananceInfo(){
+	
+	global $dbcon,$current_epoch; $maintananceModeTime = "";
+	
+	$settings_sql = "SELECT `time_to_go_live` FROM `settings` WHERE `deployment_status` = :deployment_status";	
+	$settings_q = $dbcon->prepare($settings_sql);	
+	$settings_q->bindValue(":deployment_status","maintenance");
+	if($settings_q->execute()) {												
+		
+		if($settings_q->rowCount() > 0){													
+			$maintananceInfo = $settings_q->fetch();
+			$maintananceTime = $maintananceInfo['time_to_go_live'];
+			if($current_epoch < $maintananceTime){				
+				
+				$seconds = $maintananceTime - $current_epoch;
+
+				$days    = floor($seconds / 86400);
+				$hours   = floor(($seconds - ($days * 86400)) / 3600);
+				$minutes = floor(($seconds - ($days * 86400) - ($hours * 3600))/60);
+				$seconds = floor(($seconds - ($days * 86400) - ($hours * 3600) - ($minutes*60)));
+
+				$maintananceModeTime = "Systems are in maintenance. Please come back after ";
+				if($days > 0)
+					$maintananceModeTime .= $days." days, ";
+				if($hours > 0)
+					$maintananceModeTime .= $hours." hours, ";
+				if($minutes > 0)
+					$maintananceModeTime .= $minutes." minutes and ";
+				if($seconds > 0)
+					$maintananceModeTime .= $seconds." seconds";
+			}
+			
+		}												
+	}	
+	return $maintananceModeTime;
+}
+
 ?>

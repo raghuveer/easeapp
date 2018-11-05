@@ -6,7 +6,7 @@
  * @author   Raghu Veer Dendukuri <raghuveer.d@easeapp.org>
  * @website  http://www.easeapp.org
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
- * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri and other contributors
+ * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or              * Contributors and is licensed as per their Open Source License choices.
  */
 //if the directory is one directory above the current file's parent directory http://stackoverflow.com/a/2100763/811207
 //include("/home/swnet/public_html/core/server-var-info.php");
@@ -42,11 +42,11 @@ if ((stripos($file_directory_path, $cli_dev_account_ref)) !== false) {
 
 include(dirname(dirname(__FILE__)) . "/class/PDOEx.php");
 include(dirname(dirname(__FILE__)) . "/core/db-connect-main.php");
-include(dirname(dirname(__FILE__)) . "/class/Logger.php");
-include(dirname(dirname(__FILE__)) . "/class/DBManager.php");
+include(dirname(dirname(__FILE__)) . "/class/EALogger.php");
+include(dirname(dirname(__FILE__)) . "/class/EASQLDBManager.php");
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/validate-sanitize-functions.php");
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/date-functions.php");
-include(dirname(dirname(dirname(__FILE__))) . "/app/includes/db-functions.php");
+include(dirname(dirname(dirname(__FILE__))) . "/app/includes/mysql-mariadb-database-functions.php");
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/other-functions.php");
 
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/uuid.php");

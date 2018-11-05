@@ -5,4 +5,4 @@ Disallow: /cron_php_files
 Disallow: /robots-txt-cache
 Disallow: /templates
 
-Sitemap: http://dev-framework-v1.easeapp.org/sitemap.xml
+Sitemap: http://dev-framework-v36.easeapp.org/sitemap.xml

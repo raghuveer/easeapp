@@ -7,23 +7,66 @@ ob_start();
  * @author   Raghu Veer Dendukuri <raghuveer.d@easeapp.org>
  * @website  http://www.easeapp.org
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
- * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri and other contributors
+ * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or              * Contributors and is licensed as per their Open Source License choices.
  */
 //headers to enable cors in php for one or more websites
 //header('Access-Control-Allow-Origin: *');
 //header('Access-Control-Allow-Origin: http://www.remotewebsite.com');
+/**
+ *  An example CORS-compliant method.  It will allow any GET, POST, or OPTIONS requests from any
+ *  origin.
+ *
+ *  In a production environment, you probably want to be more restrictive, but this gives you
+ *  the general idea of what is involved.  For the nitty-gritty low-down, read:
+ *
+ *  - https://developer.mozilla.org/en/HTTP_access_control
+ *  - http://www.w3.org/TR/cors/
+ *  - https://stackoverflow.com/a/9866124
+ */
+function cors() {
+	
+    // Allow from any origin
+    if (isset($_SERVER['HTTP_ORIGIN'])) {
+        // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
+        // you want to allow, and if so:
+        //header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+		header('Access-Control-Allow-Origin: https://inno-angularjs.securitywonks.net');
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Max-Age: 86400');    // cache for 1 day
+    }
+
+    // Access-Control headers are received during OPTIONS requests
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+            // may also be using PUT, PATCH, HEAD etc
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+        exit(0);
+    }
+
+    //echo "You have CORS!";
+}
+cors();
+
+/* for php websites
 header('Content-Type:text/html; charset=UTF-8');
-header( 'Expires: Sat, 26 Jul 1997 05:00:00 GMT' );
+header( 'Expires: Sat, 26 Jul 1997 05:00:00 GMT' );*/
 header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
 header( 'Cache-Control: no-store, no-cache, must-revalidate' );
 header( 'Cache-Control: pre-check=0', false ); //post-check=0 is removed, as per guidelines of Fiddler
 //header( 'Pragma: no-cache' ); //this Pragma header is commented, as this will be useful only on IE Browser, as suggested in Fiddler.
+/*
+FOLLOWING HEADERS are REMOVED in PHP, since these are DEFINED in .HTACCESS FILE
 //prevent mimetype sniffing
 header('x-content-type-options: nosniff');
 //Clickjacking Prevention, while allowing to iframe the page from sameorigin in php
 //header('X-Frame-Options', 'SAMEORIGIN', false);
 //Clickjacking Prevention overall without allowing sameorigin or a different origin from iframing the page in php
-header('X-Frame-Options: DENY');
+header('X-Frame-Options: DENY');*/
 //remove php version information header (when installed php is < v5.3), Note: it worked in php 5.5 as well
 //header('x-powered-by:');
 //remove php version information header (when installed php is => v5.3), this is better as it removes the header instead of replacing the info with something else
@@ -45,6 +88,7 @@ if ($page_is_ajax != "1") {
 
 define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 include "../app/core/server-var-info.php";
+//commented 02-11-2018 include "../app/core/server-var-info.php";
 include "../app/core/main-config.php";
 
 if(function_exists("date_default_timezone_set"))
@@ -250,14 +294,14 @@ include "../app/class/PDOEx.php";
 //This hosts the actual Database details of both dev and production environments along with corresponding db connections
 include "../app/core/db-connect-main.php";
 
-//This contains some of the basic PDO Prepared Statements based DB Functions
-include "../app/includes/db-functions.php";
+//This contains some of the basic PDO Prepared Statements based DB Functions, for MySQL & MariaDB Databases.
+include "../app/includes/mysql-mariadb-database-functions.php";
 
 //Include a Logger
-include "../app/class/Logger.php";
+include "../app/class/EALogger.php";
 
-//Include a DB Manager
-include "../app/class/DBManager.php";
+//Include a DB Manager, for MySQL and MariaDB Databases
+include "../app/class/EASQLDBManager.php";
 
 //This hosts any generic application related functions for the application that uses this framework
 include "../app/includes/other-functions.php";
@@ -403,6 +447,12 @@ $db = new DB();
 
 //This hosts user defined REST Web Service API Functions, when and if REST Web Services are offered
 include "../app/includes/other-functions-api.php";
+
+//This hosts User Authentication and Info Functions
+include "../app/includes/user-authentication-info-functions.php";
+
+//This holds all JSON Web Token Creating / Checking Functions
+include "../app/includes/json-web-token-functions.php";
 
 //Include a Template Engine here, if integrating some template engine
 // 1) Init

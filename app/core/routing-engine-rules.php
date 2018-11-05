@@ -7,7 +7,7 @@
  * @author   Raghu Veer Dendukuri <raghuveer.d@easeapp.org>
  * @website  http://www.easeapp.org
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
- * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri and other contributors
+ * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or              * Contributors and is licensed as per their Open Source License choices.
  */ 
  /*
   * This is to host the core framework related routing engine rules
@@ -67,6 +67,7 @@
  
  $routes["not-found"] = array("page_filename" => "not-found.php",
                               "is_ajax" => "0",
+							  "is_web_service_endpoint" => "3",
                               "is_frontend_page" => "2",
                               "request_method" => "ANY"                                    
                              );  
@@ -149,5 +150,55 @@
 							 "is_frontend_page" => "3",
                              "request_method" => "POST"                                    
 							);
+
+//API for register-password
+ $routes["rest-register-password"] = array("route_value" => "/rest/register-password",
+							 "route_var_count" => "3",
+							 "page_filename" => "rest-register-password.php",
+							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "1",
+							 "is_frontend_page" => "3",
+							 "request_method" => "POST" 							 
+							);	
+
+//API for change-password
+ $routes["rest-change-password"] = array("route_value" => "/rest/change-password",
+							 "route_var_count" => "3",
+							 "page_filename" => "rest-change-password.php",
+							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "1",
+							 "is_frontend_page" => "3",
+							 "request_method" => "POST" 							 
+							);	
+
+//API for forgot-password
+ $routes["rest-forgot-password"] = array("route_value" => "/rest/forgot-password",
+							 "route_var_count" => "3",
+							 "page_filename" => "rest-forgot-password.php",
+							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "1",
+							 "is_frontend_page" => "3",
+							 "request_method" => "POST" 							 
+							);
+
+//API for reset-password
+ $routes["rest-reset-password"] = array("route_value" => "/rest/reset-password",
+							 "route_var_count" => "3",
+							 "page_filename" => "rest-reset-password.php",
+							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "1",
+							 "is_frontend_page" => "3",
+							 "request_method" => "POST" 							 
+							);	
+							
+//API for get user details
+$routes["rest-get-user-details"] = array("route_value" => "/rest/user-details/get",
+							 "route_var_count" => "4",
+							 "page_filename" => "rest-user-details-get.php",
+							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "1",
+							 "is_frontend_page" => "3",
+							 "request_method" => "POST" 							 
+							);							
 	
 ?>

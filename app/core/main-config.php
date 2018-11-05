@@ -12,25 +12,25 @@
  * @author   Raghu Veer Dendukuri <raghuveer.d@easeapp.org>
  * @website  http://www.easeapp.org
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
- * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri and other contributors
+ * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or              * Contributors and is licensed as per their Open Source License choices.
  */
 //Config
 $main_config = array();  
-$main_config["site_config_site_name"] = "Easeapp PHP Framework v3";
+$main_config["site_config_site_name"] = "Easeapp PHP Framework";
 $main_config["site_config_site_caption"] = "";
 $main_config["project_main_folder"] = "";
-$main_config["dev_url"] = "dev-framework-v3.easeapp.org";
+$main_config["dev_url"] = "dev-framework-v36.easeapp.org";
 $main_config["live_url"] = "www.easeapp.org";
 $main_config["live_url_main_domain_name"] = "www.easeapp.org";
-$main_config["cli_dev_account_ref"] = "devfrv3";
+$main_config["cli_dev_account_ref"] = "dev-easeapp";
 $main_config["cli_live_account_ref"] = "easeapp";
-$main_config["organisation_name"] = "Raghuveer Dendukuri";
-$main_config["organisation_name_full"] = "Raghuveer Dendukuri and Contributors";
+$main_config["organisation_name"] = "Easeapp";
+$main_config["organisation_name_full"] = "Easeapp";
 $main_config["siteroot_basedir"] = $_SERVER['DOCUMENT_ROOT'] . "/";
-$main_config["siteroot_basedir_command_line"] = "/home/easeapp/public_html/";
-$main_config["siteroot_basedir_command_line_dev"] = "/home/devfrv3/public_html/";
-$main_config["site_home_path_full"] = "/home/prodapi/";
-$main_config["site_home_path_full_dev"] = "/home/uatpgsw/";
+$main_config["siteroot_basedir_command_line"] = "/home/easeapp/webapps/app-easeapp/public_html";
+$main_config["siteroot_basedir_command_line_dev"] = "/home/dev-easeapp/webapps/app-v36/public_html";
+$main_config["site_home_path_full"] = "/home/easeapp/webapps/app-easeapp/";
+$main_config["site_home_path_full_dev"] = "/home/dev-easeapp/webapps/app-v36/";
 $main_config["routing_rule_length"] = "500";
 $main_config["encr_filename_salt_length"] = "20";
 $main_config["encr_filename_length"] = "45";
@@ -58,7 +58,7 @@ $main_config["pg-asymmetric-anonymous-encryption-logs-keypair-filename"] = "pg-c
 $main_config["pg-asymmetric-authentication-keypair-filename"] = "pg-ed25519-asymmetric-authentication-keypair.key";
 $main_config["pg-asymmetric-authentication-logs-keypair-filename"] = "pg-ed25519-asymmetric-authentication-logs-keypair.key";
 //$main_config["pg-symmetric-encryption-key-signature-filename"] = "pg-xsalsa20-symmetric-encryption-key-signature.key";
-$main_config["active_session_backend"] = "files"; // files: File system based sessions, redis: Single Redis Server, default value: file
+$main_config["active_session_backend"] = "files"; // files: File system based sessions, redis: Single Redis Server, default value: files
 $main_config["files_based_session_storage_location_choice"] = "custom-location"; // default-location: Default File System based Session Storage Location, as per PHP Settings, custom-location: User Chosen File System based Session Storage Location, default value: custom-location
 $main_config["files_based_session_storage_custom_path"] = dirname($_SERVER['DOCUMENT_ROOT']) . "/sessions"; // User Chosen File System based Custom Session Storage Location
 $main_config["single_redis_server_session_backend_host"] = "tcp://localhost:6379"; // Details of single redis server related session storage host details
@@ -137,14 +137,6 @@ $phpmailer_folder_path = "../app/includes/phpmailer/";
 //ckeditor folder path
 $ckeditor_directory_path = "frontend-includes/ckeditor/";
 
-//jquery-colorpicker-by-vanderlee folder path
-$jquery_colorpicker_vanderlee_directory_path = "frontend-includes/jquery-colorpicker-vanderlee/";
-
-//fancybox directory config
-//$fancybox_directory_path = "includes/fancybox/source/";
-//$fancybox_directory_path = "../app/includes/fancybox/source/";
-
-
 //ajax pages directory config
 $ajax_pages_directory_path = "ajax-pages/";
 
@@ -210,5 +202,21 @@ $loggerConfig = array(
                 "severity" => array());
 
 $siteLogPath = "../easeapp-logs/";
+
+//User's Unique Identifier Settings
+$user_unique_identifier_string_setting = "email-address";//email-address | mobile-number
+
+//JSON Web Token Authentication Details Start
+//Generic Details
+$jwtTokenIssuer = "Easeapp JWT Token Issuer";
+$jwtTokenAudience = array('Web Application','Android Mobile App','iOS mobile App');
+$jwtTokenlifeTime = "7200"; //2 hours = 7200 seconds
+
+//HS256 Specific Details
+$jwtAuthTokenSecretKey = "9pzAcm770qEoqAMPxtSheDipSLW8d3LFvfpNBfeUi8brsbSDGGAXhglzp5UZnDOGA+5NiL7ndQCt1MqkX1eZTA==";
+$jwtTokenHashAlgorithm = "sha256";
+
+//JSON Web Token Authentication Details End
+
 
 ?>

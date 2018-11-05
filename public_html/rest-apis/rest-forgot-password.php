@@ -1,5 +1,5 @@
-<?php
-defined('START') or die;
+<?
+defined('START') or die; 
 
 /**
  * Easeapp PHP Framework - A Simple MVC based Procedural Framework in PHP 
@@ -10,7 +10,9 @@ defined('START') or die;
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
  * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or              * Contributors and is licensed as per their Open Source License choices.
  *
- * This page contains application related rest api specific functions.
- */ 
-
+ * API for forgot password
+ *
+ */
+ 
+ 
 ?>
