@@ -52,7 +52,7 @@ include(dirname(dirname(dirname(__FILE__))) . "/app/includes/other-functions.php
 include(dirname(dirname(dirname(__FILE__))) . "/app/includes/uuid.php");
 
 //PHPMailer Library: This is to send Email through SMTP / Sendmail in PHP Scripts
-include(dirname(dirname(dirname(__FILE__))) . "/app/includes/phpmailer-v602/src/PHPMailer.php");
+include(dirname(dirname(dirname(__FILE__))) . "/app/includes/phpmailer-v605/src/PHPMailer.php");
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;

@@ -253,7 +253,7 @@ include "../app/core/session-check-functions.php";
 include "../app/core/user-authorization-functions.php";
 
 //PHPMailer Library: This is to send Email through SMTP / Sendmail in PHP Scripts
-include "../app/includes/phpmailer-v602/src/PHPMailer.php";
+include "../app/includes/phpmailer-v605/src/PHPMailer.php";
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;

@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.6.1] - 2018-11-05
+### Added
+- "PHPMailer v6.05", is added in this release.
+### Removed
+- "PHPMailer v6.02", ts removed in this release.
+- "OPAuth", is removed in this release.
+
+
 ## [3.6.0] - 2018-11-05
 ### Added
 - "JWT Auth Token Functions with HS256 algorithm", is added in this release.
