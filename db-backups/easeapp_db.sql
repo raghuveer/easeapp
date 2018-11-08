@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2018 at 08:08 AM
+-- Generation Time: Nov 08, 2018 at 10:32 AM
 -- Server version: 10.1.25-MariaDB-1~xenial
 -- PHP Version: 7.2.11
 
@@ -224,9 +224,19 @@ CREATE TABLE `user_auth_tokens` (
   `jwt_iat` bigint(20) NOT NULL COMMENT ' The "iat" (issued at) claim identifies the time at which the JWT was    issued.  This claim can be used to determine the age of the JWT.  Its    value MUST be a number containing a NumericDate value.  Use of this    claim is OPTIONAL.',
   `jwt_nbf` bigint(20) DEFAULT NULL COMMENT 'The "nbf" (not before) claim identifies the time before which the JWT    MUST NOT be accepted for processing.  The processing of the "nbf"    claim requires that the current date/time MUST be after or equal to    the not-before date/time listed in the "nbf" claim.  Implementers MAY    provide for some small leeway, usually no more than a few minutes, to    account for clock skew.  Its value MUST be a number containing a    NumericDate value.  Use of this claim is OPTIONAL.',
   `jwt_exp` bigint(20) NOT NULL COMMENT ' The "exp" (expiration time) claim identifies the expiration time on    or after which the JWT MUST NOT be accepted for processing.  The    processing of the "exp" claim requires that the current date/time    MUST be before the expiration date/time listed in the "exp" claim.',
+  `jwt_jws_alg` enum('HS256','HS384','HS512','RS256','RS384','RS512','ES256','ES384','ES512','PS256','PS384','none') COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT 'HS256' COMMENT 'HS256: HMAC using SHA-256, HS384: HMAC using SHA-384, HS512:HMAC using SHA-512, RS256: RSASSA-PKCS1-v1_5 using SHA-256, RS384: RSASSA-PKCS1-v1_5 using SHA-384, RS512: RSASSA-PKCS1-v1_5 using SHA-512, ES256: ECDSA using P-256 and SHA-256, ES384: ECDSA using P-384 and SHA-384, ES512: ECDSA using P-521 and SHA-512, PS256: RSASSA-PSS using SHA-256 and MGF1 with SHA-256, PS384: RSASSA-PSS using SHA-384 and MGF1 with SHA-384, PS512: RSASSA-PSS using SHA-512 and MGF1 with SHA-512, none: No digital signature or MAC performed. This is as per 3.1 section of https://www.rfc-editor.org/rfc/rfc7518.txt',
   `is_reusable` enum('1','0') COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '1' COMMENT '1: yes, till the token expires, 0: no, useful for single transaction only',
   `is_active_status` enum('0','1') COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '1' COMMENT '0: inactive, 1: active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- Dumping data for table `user_auth_tokens`
+--
+
+INSERT INTO `user_auth_tokens` (`user_auth_token_id`, `user_id`, `date_time_token_creation`, `jwt_iss`, `jwt_sub`, `jwt_aud`, `jwt_iat`, `jwt_nbf`, `jwt_exp`, `jwt_jws_alg`, `is_reusable`, `is_active_status`) VALUES
+(1, 1, '2018-11-05 08:12:03', 'Easeapp JWT Token Issuer', '1', '[\"Web Application\",\"Android Mobile App\",\"iOS mobile App\"]', 1541405523, 1541405523, 1541412723, 'HS256', '1', '0'),
+(2, 1, '2018-11-05 09:12:12', 'Easeapp JWT Token Issuer', '1', '[\"Web Application\",\"Android Mobile App\",\"iOS mobile App\"]', 1541409132, 1541409132, 1541416332, 'HS256', '1', '0'),
+(3, 1, '2018-11-05 13:17:46', 'Easeapp JWT Token Issuer', '1', '[\"Web Application\",\"Android Mobile App\",\"iOS mobile App\"]', 1541423866, 1541423866, 1541431066, 'HS256', '1', '1');
 
 --
 -- Indexes for dumped tables
@@ -339,7 +349,7 @@ ALTER TABLE `sm_site_member_classification_details`
 -- AUTO_INCREMENT for table `user_auth_tokens`
 --
 ALTER TABLE `user_auth_tokens`
-  MODIFY `user_auth_token_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'The "jti" (JWT ID) claim provides a unique identifier for the JWT.    The identifier value MUST be assigned in a manner that ensures that    there is a negligible probability that the same value will be    accidentally assigned to a different data object; if the application    uses multiple issuers, collisions MUST be prevented among values    produced by different issuers as well.  The "jti" claim can be used    to prevent the JWT from being replayed.  The "jti" value is a case-    sensitive string.  Use of this claim is OPTIONAL.';
+  MODIFY `user_auth_token_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'The "jti" (JWT ID) claim provides a unique identifier for the JWT.    The identifier value MUST be assigned in a manner that ensures that    there is a negligible probability that the same value will be    accidentally assigned to a different data object; if the application    uses multiple issuers, collisions MUST be prevented among values    produced by different issuers as well.  The "jti" claim can be used    to prevent the JWT from being replayed.  The "jti" value is a case-    sensitive string.  Use of this claim is OPTIONAL.', AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
