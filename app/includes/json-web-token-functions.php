@@ -19,7 +19,7 @@ if (defined('STDIN') ) {
  */
 
 //Generate JWT Auth Token using HS256 (SHA256 using HMAC) Algorithm
-function ea_generate_hs256_alg_jwt_token($user_id_input, $user_type_input, $user_privileges_list_input, $jwt_iss_input, $jwt_sub_input, $jwt_aud_input, $jwt_iat_input, $jwt_nbf_input, $jwt_exp_input, $jwt_token_rel_unique_jti_input) {
+function ea_generate_hs256_alg_jwt_token($user_type_input, $user_privileges_list_input, $jwt_iss_input, $jwt_sub_input, $jwt_aud_input, $jwt_iat_input, $jwt_nbf_input, $jwt_exp_input, $jwt_token_rel_unique_jti_input) {
 	
 	global $jwtAuthTokenSecretKey,$jwtTokenHashAlgorithm;
 	
@@ -265,7 +265,7 @@ function ea_update_user_rel_active_jwt_token_status($user_auth_token_id_input) {
 	
 }
 
-function ea_insert_user_rel_active_jwt_token_refs($user_id_input, $date_time_token_creation_input, $jwt_iss_input, $jwt_sub_input, $jwt_aud_input, $jwt_iat_input, $jwt_nbf_input, $jwt_exp_input, $is_reusable_input, $is_active_status_input) {
+function ea_insert_user_rel_active_jwt_token_refs($user_id_input, $date_time_token_creation_input, $jwt_iss_input, $jwt_sub_input, $jwt_aud_input, $jwt_iat_input, $jwt_nbf_input, $jwt_exp_input, $jwt_jws_alg_input, $is_reusable_input, $is_active_status_input) {
 	
 	global $dbcon;
 	
@@ -279,6 +279,7 @@ function ea_insert_user_rel_active_jwt_token_refs($user_id_input, $date_time_tok
 	$new_user_auth_token_insert_query->bindValue(":jwt_iat",$jwt_iat_input);	
 	$new_user_auth_token_insert_query->bindValue(":jwt_nbf",$jwt_nbf_input);	
 	$new_user_auth_token_insert_query->bindValue(":jwt_exp",$jwt_exp_input);	
+	$new_user_auth_token_insert_query->bindValue(":jwt_jws_alg",$jwt_jws_alg_input);
 	$new_user_auth_token_insert_query->bindValue(":is_reusable",$is_reusable_input);	
 	$new_user_auth_token_insert_query->bindValue(":is_active_status",$is_active_status_input);	
 	if($new_user_auth_token_insert_query->execute()){

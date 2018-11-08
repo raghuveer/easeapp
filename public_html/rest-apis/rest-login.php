@@ -207,7 +207,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 							$jwt_token_audience_json_encoded = json_encode($jwtTokenAudience);
 							
 							//Do Insert Query, to insert new JWT Token referencing information, w.r.t. the User.
-							$last_inserted_user_rel_active_jwt_token_id = ea_insert_user_rel_active_jwt_token_refs($user_id, $current_datetime, $jwtTokenIssuer, $user_id, $jwt_token_audience_json_encoded, $token_created_time_epoch, $token_created_time_epoch, $token_expiry_epoch, "1", "1");
+							$last_inserted_user_rel_active_jwt_token_id = ea_insert_user_rel_active_jwt_token_refs($user_id, $current_datetime, $jwtTokenIssuer, $user_id, $jwt_token_audience_json_encoded, $token_created_time_epoch, $token_created_time_epoch, $token_expiry_epoch, "HS256", "1", "1");
 							
 							//Define JTI Claim of JWT Token, by assigning the received reference of recent token info insertion
 							$jwt_token_rel_unique_jti = $last_inserted_user_rel_active_jwt_token_id;
