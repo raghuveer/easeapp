@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ## [3.6.3] - 2018-11-09
+### Added
+- "Separate Header Functions file", is added in this release.
+
 ### Changed
 - "Login Feature Bug Fixes", in this release.
 
