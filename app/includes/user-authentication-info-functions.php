@@ -58,7 +58,7 @@ function ea_check_user_login_with_email_address($email_address_input, $password_
 				
 				$user_classification_name_association_ups_array = array();
 				foreach($user_classification_details_result as $user_classification_details_result_row) {
-					$sm_site_member_classification_details_id = $user_classification_details_result_row["sm_site_member_classification_details_id"];
+					$sm_site_member_classification_detail_id = $user_classification_details_result_row["sm_site_member_classification_detail_id"];
 					$sm_user_role = $user_classification_details_result_row["sm_user_role"];
 					$user_privilege_summary = $user_classification_details_result_row["user_privilege_summary"];
 					
@@ -128,7 +128,7 @@ function ea_check_user_login_with_mobile_number($mobile_number_input, $password_
 				
 				$user_classification_name_association_ups_array = array();
 				foreach($user_classification_details_result as $user_classification_details_result_row) {
-					$sm_site_member_classification_details_id = $user_classification_details_result_row["sm_site_member_classification_details_id"];
+					$sm_site_member_classification_detail_id = $user_classification_details_result_row["sm_site_member_classification_detail_id"];
 					$sm_user_role = $user_classification_details_result_row["sm_user_role"];
 					$user_privilege_summary = $user_classification_details_result_row["user_privilege_summary"];
 					
@@ -164,7 +164,7 @@ function ea_get_user_classication_details($sm_memb_id_input) {
 	$is_active_status_input = '1';
 
 	//Check in site_members db table
-	$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_associations` ssmca LEFT JOIN sm_site_member_classification_details ssmcd ON ssmca.sm_site_member_classification_details_id = ssmcd.sm_site_member_classification_details_id WHERE ssmca.is_active_status =:ssmca_is_active_status AND ssmcd.is_active_status =:ssmcd_is_active_status AND ssmca.valid_to_date LIKE :ssmca_valid_to_date AND ssmca.sm_memb_id =:ssmca_sm_memb_id";
+	$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_associations` ssmca LEFT JOIN sm_site_member_classification_details ssmcd ON ssmca.sm_site_member_classification_detail_id = ssmcd.sm_site_member_classification_detail_id WHERE ssmca.is_active_status =:ssmca_is_active_status AND ssmcd.is_active_status =:ssmcd_is_active_status AND ssmca.valid_to_date LIKE :ssmca_valid_to_date AND ssmca.sm_memb_id =:ssmca_sm_memb_id";
 	
 	$user_classification_details_get_select_query = $dbcon->prepare($user_classification_details_get_sql);
 	$user_classification_details_get_select_query->bindValue(":ssmca_is_active_status",$is_active_status_input);
@@ -177,6 +177,61 @@ function ea_get_user_classication_details($sm_memb_id_input) {
 	   $user_classification_details_get_select_query_result = $user_classification_details_get_select_query->fetchAll();
 	   //print_r($user_classification_details_get_select_query_result);
 	   return $user_classification_details_get_select_query_result;
+	}
+	return $constructed_array;
+	
+}
+
+function ea_get_user_groups_list($sm_user_type_input, $user_group_status_input) {
+	
+	global $dbcon;
+	
+	$constructed_array = array();
+	
+	if ($user_group_status_input == "0") {
+		//Check in sm_site_member_classification_details db table
+		$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_details` WHERE `sm_user_type`=:sm_user_type AND `is_active_status`=:is_active_status ORDER BY `sm_user_level` ASC";
+		
+		$user_classification_details_get_select_query = $dbcon->prepare($user_classification_details_get_sql);
+		$user_classification_details_get_select_query->bindValue(":sm_user_type",$sm_user_type_input);
+		$user_classification_details_get_select_query->bindValue(":is_active_status","0");
+		$user_classification_details_get_select_query->execute();
+		
+	} else if ($user_group_status_input == "1") {
+		//Check in sm_site_member_classification_details db table
+		$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_details` WHERE `sm_user_type`=:sm_user_type AND `is_active_status`=:is_active_status ORDER BY `sm_user_level` ASC";
+		
+		$user_classification_details_get_select_query = $dbcon->prepare($user_classification_details_get_sql);
+		$user_classification_details_get_select_query->bindValue(":sm_user_type",$sm_user_type_input);
+		$user_classification_details_get_select_query->bindValue(":is_active_status","1");
+		$user_classification_details_get_select_query->execute();
+		
+	} else {
+		//Check in sm_site_member_classification_details db table
+		$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_details` WHERE `sm_user_type`=:sm_user_type ORDER BY `sm_user_level` ASC";
+		
+		$user_classification_details_get_select_query = $dbcon->prepare($user_classification_details_get_sql);
+		$user_classification_details_get_select_query->bindValue(":sm_user_type",$sm_user_type_input);
+		$user_classification_details_get_select_query->execute();
+	}//close of else of if ($user_group_status_input == "0") {
+	
+	if($user_classification_details_get_select_query->rowCount() > 0) {
+	    $user_classification_details_get_select_query_result = $user_classification_details_get_select_query->fetchAll();
+	    //print_r($user_classification_details_get_select_query_result);
+	    
+		foreach ($user_classification_details_get_select_query_result as $user_classification_details_get_select_query_result_row) {
+			
+			$temp_row_array = array();
+		    $temp_row_array["user_classification_details_id"] = $user_classification_details_get_select_query_result_row["sm_site_member_classification_detail_id"];
+		    $temp_row_array["user_type"] = $user_classification_details_get_select_query_result_row["sm_user_type"];
+		    $temp_row_array["user_level"] = $user_classification_details_get_select_query_result_row["sm_user_level"];
+		    $temp_row_array["user_role"] = $user_classification_details_get_select_query_result_row["sm_user_role"];
+		    $temp_row_array["user_department"] = $user_classification_details_get_select_query_result_row["department"];
+		    $temp_row_array["user_privilege_summary"] = $user_classification_details_get_select_query_result_row["user_privilege_summary"];
+		    $constructed_array[] = $temp_row_array;
+	    }//close of foreach ($user_classification_details_get_select_query_result as $user_classification_details_get_select_query_result_row) {
+			
+		return $constructed_array;
 	}
 	return $constructed_array;
 	
@@ -210,7 +265,68 @@ function ea_get_quick_user_info($sm_memb_id_input) {
 		
 		$user_classification_name_association_ups_array = array();
 		foreach($user_classification_details_result as $user_classification_details_result_row) {
-			$sm_site_member_classification_details_id = $user_classification_details_result_row["sm_site_member_classification_details_id"];
+			$sm_site_member_classification_detail_id = $user_classification_details_result_row["sm_site_member_classification_detail_id"];
+			$sm_user_role = $user_classification_details_result_row["sm_user_role"];
+			$user_privilege_summary = $user_classification_details_result_row["user_privilege_summary"];
+			
+			$user_classification_name_association_ups_array[] = $user_privilege_summary;
+			
+		}//close of foreach($user_classification_details_result as $user_classification_details_result_row) {
+		
+		$constructed_array[$sm_memb_id_input]["user_privileges_list"] = implode(", ", $user_classification_name_association_ups_array);
+		
+		return $constructed_array;
+	}//close of if($quick_user_info_get_select_query->rowCount() > 0) {
+	return $constructed_array;
+	
+}
+
+function ea_get_quick_user_info_based_on_email_or_mobile($email_input, $mobile_input, $user_unique_identifier_setting_input, $ip_address_input) {
+	
+	global $dbcon;
+	
+	$constructed_array = array();
+	
+	$quick_user_info_get_select_query = array();
+	
+	//Identify the Unique Identifier Setting of User Account
+	if ($user_unique_identifier_setting_input == "email-address") {
+		//Do Select Query based on Email Address as User Identifier
+		$quick_user_info_get_sql = "SELECT * FROM `site_members` WHERE `sm_email`=:sm_email";	
+		$quick_user_info_get_select_query = $dbcon->prepare($quick_user_info_get_sql);		
+		$quick_user_info_get_select_query->bindValue(":sm_email",$email_input);
+		$quick_user_info_get_select_query->execute();
+			
+	} else if ($user_unique_identifier_setting_input == "mobile-number") {
+		//Do Select Query based on Mobile Number as User Identifier
+		$quick_user_info_get_sql = "SELECT * FROM `site_members` WHERE `sm_mobile`:sm_mobile";	
+		$quick_user_info_get_select_query = $dbcon->prepare($quick_user_info_get_sql);		
+		$quick_user_info_get_select_query->bindValue(":sm_mobile",$mobile_input);
+		$quick_user_info_get_select_query->execute();
+		
+	}//close of else if of if ($user_unique_identifier_setting_input == "email-address") {
+	
+	if($quick_user_info_get_select_query->rowCount() > 0) {
+		$quick_user_info_get_select_query_result = $quick_user_info_get_select_query->fetch();
+		
+		$sm_memb_id_input = $quick_user_info_get_select_query_result["sm_memb_id"];
+		
+		$constructed_array[$sm_memb_id_input]["user_id"] = $quick_user_info_get_select_query_result["sm_memb_id"];
+		$constructed_array[$sm_memb_id_input]["user_email"] = $quick_user_info_get_select_query_result["sm_email"];
+		$constructed_array[$sm_memb_id_input]["user_mobile"] = $quick_user_info_get_select_query_result["sm_mobile"];
+		$constructed_array[$sm_memb_id_input]["user_phone"] = $quick_user_info_get_select_query_result["sm_phone"];
+		$constructed_array[$sm_memb_id_input]["user_salutation"] = $quick_user_info_get_select_query_result["sm_salutation"];
+		$constructed_array[$sm_memb_id_input]["user_firstname"] = $quick_user_info_get_select_query_result["sm_firstname"];
+		$constructed_array[$sm_memb_id_input]["user_middlename"] = $quick_user_info_get_select_query_result["sm_middlename"];
+		$constructed_array[$sm_memb_id_input]["user_lastname"] = $quick_user_info_get_select_query_result["sm_lastname"];
+		$constructed_array[$sm_memb_id_input]["user_type"] = $quick_user_info_get_select_query_result["sm_user_type"];
+		$constructed_array[$sm_memb_id_input]["user_status"] = $quick_user_info_get_select_query_result["sm_user_status"];
+		
+		$user_classification_details_result = ea_get_user_classication_details($sm_memb_id_input);
+		
+		$user_classification_name_association_ups_array = array();
+		foreach($user_classification_details_result as $user_classification_details_result_row) {
+			$sm_site_member_classification_detail_id = $user_classification_details_result_row["sm_site_member_classification_detail_id"];
 			$sm_user_role = $user_classification_details_result_row["sm_user_role"];
 			$user_privilege_summary = $user_classification_details_result_row["user_privilege_summary"];
 			

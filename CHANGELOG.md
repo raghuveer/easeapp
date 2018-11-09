@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.6.3] - 2018-11-09
+### Changed
+- "Login Feature Bug Fixes", in this release.
+
+
 ## [3.6.2] - 2018-11-08
 ### Added
 - "JWT specific JWS related Algorithm field", is added in user_auth_tokens db table, in this release.

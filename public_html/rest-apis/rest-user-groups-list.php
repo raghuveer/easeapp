@@ -2,15 +2,8 @@
 defined('START') or die; 
 
 /**
- * Easeapp PHP Framework - A Simple MVC based Procedural Framework in PHP 
  *
- * @package  Easeapp
- * @author   Raghu Veer Dendukuri <raghuveer.d@easeapp.org>
- * @website  http://www.easeapp.org
- * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
- * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or              * Contributors and is licensed as per their Open Source License choices.
- *
- * REST API Service, that consumes JSON Web Token (w.r.t. JWS) Specification. This is used to send User's Quick Info, in the response.
+ * This REST API Endpoint is used to get List of Admin User Groups, in the response.
  *
  */
 
@@ -32,25 +25,9 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 			$eventLog->log("JWT Auth Token is Verified and Valid, for this User");
 			
 			//Filter Inputs	
-			$email_input = trim(isset($ea_received_rest_ws_raw_array_input['email']) ? filter_var($ea_received_rest_ws_raw_array_input['email'], FILTER_SANITIZE_EMAIL) : '');
-			$mobile_input = trim(isset($ea_received_rest_ws_raw_array_input['mobile']) ? filter_var($ea_received_rest_ws_raw_array_input['mobile'], FILTER_SANITIZE_NUMBER_INT) : '');
+			$user_type_input = trim(isset($ea_received_rest_ws_raw_array_input['user_type']) ? filter_var($ea_received_rest_ws_raw_array_input['user_type'], FILTER_SANITIZE_STRING) : '');
 			
-			//Identify the Unique Identifier Setting of User Account
-			if ($user_unique_identifier_string_setting == "email-address") {
-				// Validate e-mail
-				if (!filter_var($email_input, FILTER_VALIDATE_EMAIL) == true) {
-					$eventLog->log($email_input . " - Not a Valid Email Address");
-					$email_input = "";
-				}//close of if (!filter_var($email_input, FILTER_VALIDATE_EMAIL) === true) {
-					
-			} else if ($user_unique_identifier_string_setting == "mobile-number") {
-				// Validate mobile number
-				if (($mobile_input == '0') || (!ctype_digit($mobile_input))) {
-					$eventLog->log($mobile_input . " - Not a Valid Mobile Number");
-					$mobile_input = "";
-				}//close of if (($mobile_input == '0') || (!ctype_digit($mobile_input))) {
-				
-			}//close of else if of if ($unique_identifier_setting_input == "email-address") {
+			$user_group_status_input = trim(isset($ea_received_rest_ws_raw_array_input['status']) ? filter_var($ea_received_rest_ws_raw_array_input['user_group_status'], FILTER_SANITIZE_NUMBER_INT) : '');
 			
 			//Check if the IP Address Input is a Valid IPv4 Address
 			if (filter_var($ea_received_rest_ws_raw_array_input['ip_address'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
@@ -61,35 +38,29 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				$ip_address_input = '';
 			}//close of else of if (filter_var($_POST['ip_address'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
 		
+			$eventLog->log("user_type_input -> " . $user_type_input);
+			$eventLog->log("user_group_status_input -> " . $user_group_status_input);
+			$eventLog->log("ip_address_input -> " . $ip_address_input);
 			
 			//Check if all inputs are received correctly from the REST Web Service
-			if ($user_unique_identifier_string_setting == "") {
-				//Invalid Unique Identifier setting scenario
+			if (($user_type_input != "member") && ($user_type_input != "admin")) {
+				//Invalid User Type scenario
 				
 				//Construct Content, that will be sent in Response body, of the REST Web Service
-				$response['status'] = "invalid-user-identifier-setting";
-				$response['status-description'] = "Invalid User Identifier Setting, please check and try again.";
+				$response['status'] = "invalid-user-type";
+				$response['status-description'] = "Invalid User Type info submitted, please check and try again.";
 				
-				$eventLog->log("Please provide a valid unique identifier setting.");
+				$eventLog->log("Please provide a valid User Type info.");
 				
-			} else if (($user_unique_identifier_string_setting == "email-address") && ($email_input == "")) {
-				//Invalid Email Address scenario
-				
-				//Construct Content, that will be sent in Response body, of the REST Web Service
-				$response['status'] = "missing-email-address";
-				$response['status-description'] = "Email Address is expected as User Identifier, please check and try again.";
-				
-				$eventLog->log("Please provide a valid Email Address.");
-				
-			} else if (($user_unique_identifier_string_setting == "mobile-number") && ($mobile_input == "")) {
-				//Invalid Mobile Number scenario
+			} else if (($user_group_status_input != "0") && ($user_group_status_input != "1") && ($user_group_status_input != "")) {
+				//Invalid User Group Status scenario
 				
 				//Construct Content, that will be sent in Response body, of the REST Web Service
-				$response['status'] = "missing-mobile-number";
-				$response['status-description'] = "Mobile Number is expected as User Identifier, please check and try again.";
+				$response['status'] = "invalid-user-group-status";
+				$response['status-description'] = "Invalid User Group Status info submitted, please check and try again.";
 				
-				$eventLog->log("Please provide a valid Mobile Number.");
-						  
+				$eventLog->log("Please provide a valid User Group Status info.");
+				
 			} else if ($ip_address_input == "") {
 				//One or More Inputs are Missing!!!
 				
@@ -103,48 +74,48 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				//All inputs are Valid
 			
 				$eventLog->log("All inputs are valid.");
-				
+			
 				try { 
 				
-					//Do Get Quick User Info, from site_members db table
-					$quick_user_info_result = ea_get_quick_user_info_based_on_email_or_mobile($email_input, $mobile_input, $user_unique_identifier_string_setting, $ip_address_input);
-					$quick_user_info_result_count = count($quick_user_info_result);
+					//Do Get User Groups List, from sm_site_member_classification_details db table
+					$user_group_list_result = ea_get_user_groups_list($user_type_input, $user_group_status_input);
+					$user_group_list_result_count = count($user_group_list_result);
 					
-					$eventLog->log("Count -> " . $quick_user_info_result_count); 
+					$eventLog->log("Count -> " . $user_group_list_result_count); 
 					
-					if ($quick_user_info_result_count > "0") {
-						//Valid User Exists!!!
+					if ($user_group_list_result_count > "0") {
+						//One or More User Groups Exist and Active
 						
-						$response[] = $quick_user_info_result;
+						$response[] = $user_group_list_result;
 						
-						$quick_user_info_result_json_encoded = json_encode($quick_user_info_result);
+						$user_group_list_result_json_encoded = json_encode($user_group_list_result);
 					
-						$eventLog->log("Quick User Info -> " . $quick_user_info_result_json_encoded); 
+						$eventLog->log("User Group List -> " . $user_group_list_result_json_encoded); 
 						
 					} else {
 						
 						//Construct Content, that will be sent in Response body, of the REST Web Service
-						$response['status'] = "invalid-user-id-reference";
-						$response['status-description'] = "Invalid User ID Reference.";
+						$response['status'] = "active-user-groups-doesnot-exist";
+						$response['status-description'] = "User Groups List -> No Active User Groups Exist, please check and try again.";
 						
-						$eventLog->log("User Info -> Invalid User ID Submitted, please check and try again."); 
-					}//close of else of if ($quick_user_info_result_count > "0") {
+						//No Active User Groups Exist
+						$eventLog->log("User Groups List -> No Active User Groups Exist, please check and try again."); 
+					}//close of else of if ($user_group_list_result_count > "0") {
 					
 				} catch (Exception $e){
 					$eventLog->log("Exception -> " . html_escaped_output($e->getMessage())); 
 					//addLog($logFile, "Exception -> ".$e->getMessage());	
 				}//close of  catch (Exception $e){
 				
-					
-			}//close of else of if ($user_unique_identifier_string_setting == "") {
 			
-			
+			}//close of else of if (($user_type_input != "member") || ($user_type_input != "admin")) {
+				
 			
 		} else {
 			
 			//Construct Content, that will be sent in Response body, of the REST Web Service
 			$response['status'] = "access-forbidden";
-			$response['status-description'] = "Resources that requires a different set of access permissions are requested, please contact admin, if access to these resources are required.";
+			$response['status-description'] = "Resources that require a different set of access permissions are requested, please contact admin, if access to these resources are required.";
 			
 			//Define Response Header, with 403 Forbidden HTTP Response Code, back to the Client Application. This is specific to Invalid JWT Token Submission by Client Applications.
 			header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 403 Forbidden');
@@ -154,7 +125,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 	}//close of if ($ea_maintenance_mode == false) {
 	
 } else {
-	
+
 	//Construct Content, that will be sent in Response body, of the REST Web Service
 	$response['status'] = "invalid-input";
 	$response['status-description'] = "Invalid Input, Please check and provide all information.";
@@ -162,6 +133,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 	//Define Response Header, with 400 Bad Request HTTP Response Code, back to the Client Application
 	header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 400 Bad Request');
 }//close of else of if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest_ws_raw_array_input)) && (count($ea_received_rest_ws_raw_array_input) == "3")) {
+
 
 
 

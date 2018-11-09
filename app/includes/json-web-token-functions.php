@@ -269,7 +269,7 @@ function ea_insert_user_rel_active_jwt_token_refs($user_id_input, $date_time_tok
 	
 	global $dbcon;
 	
-	$new_user_auth_token_insert_sql = "INSERT INTO `user_auth_tokens`(`user_id`, `date_time_token_creation`, `jwt_iss`, `jwt_sub`, `jwt_aud`, `jwt_iat`, `jwt_nbf`, `jwt_exp`, `is_reusable`, `is_active_status`) VALUES (:user_id,:date_time_token_creation,:jwt_iss,:jwt_sub,:jwt_aud,:jwt_iat,:jwt_nbf,:jwt_exp,:is_reusable,:is_active_status)";
+	$new_user_auth_token_insert_sql = "INSERT INTO `user_auth_tokens`(`user_id`, `date_time_token_creation`, `jwt_iss`, `jwt_sub`, `jwt_aud`, `jwt_iat`, `jwt_nbf`, `jwt_exp`, `jwt_jws_alg`, `is_reusable`, `is_active_status`) VALUES (:user_id,:date_time_token_creation,:jwt_iss,:jwt_sub,:jwt_aud,:jwt_iat,:jwt_nbf,:jwt_exp,:jwt_jws_alg,:is_reusable,:is_active_status)";
 	$new_user_auth_token_insert_query = $dbcon->prepare($new_user_auth_token_insert_sql);						
 	$new_user_auth_token_insert_query->bindValue(":user_id",$user_id_input);
 	$new_user_auth_token_insert_query->bindValue(":date_time_token_creation",$date_time_token_creation_input);

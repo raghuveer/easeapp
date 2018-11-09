@@ -23,11 +23,33 @@ ob_start();
  *  - http://www.w3.org/TR/cors/
  *  - https://stackoverflow.com/a/9866124
  */
- 
-//To prevent direct access to a file inside public root or public_html or www folder, 
-define("START", "No Direct Access", true);
+function cors() {
+	
+    // Allow from any origin
+    if (isset($_SERVER['HTTP_ORIGIN'])) {
+        // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
+        // you want to allow, and if so:
+        //header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+		header('Access-Control-Allow-Origin: https://inno-angularjs.securitywonks.net');
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Max-Age: 86400');    // cache for 1 day
+    }
 
-include "../app/includes/header-functions.php";
+    // Access-Control headers are received during OPTIONS requests
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+            // may also be using PUT, PATCH, HEAD etc
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+        exit(0);
+    }
+
+    //echo "You have CORS!";
+}
 cors();
 
 /* for php websites
@@ -52,8 +74,8 @@ header_remove('x-powered-by');
 //to allow flash to share client side data between its applications in php
 header('X-Permitted-Cross-Domain-Policies: master-only');
 
-/*//To prevent direct access to a file inside public root or public_html or www folder, 
-define("START", "No Direct Access", true);*/
+//To prevent direct access to a file inside public root or public_html or www folder, 
+define("START", "No Direct Access", true);
 
 //include timer class file and create object
 include "../app/class/Timer.php";

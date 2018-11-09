@@ -18,9 +18,9 @@
     {
    
     $dbhost_site = "localhost";
-    $dbusername_site = "";
-    $dbpassword_site = "";
-    $dbname_site = "";
+    $dbusername_site = "easeapp_dbuser";
+    $dbpassword_site = "2eD}vYdrnQYWUl:T@PUT3";
+    $dbname_site = "easeapp_db";
 	
     
     }
@@ -28,9 +28,9 @@
     {
    
     $dbhost_site = "localhost";
-    $dbusername_site = "";
-    $dbpassword_site = "";
-    $dbname_site = "";	
+    $dbusername_site = "easeapp_dbuser";
+    $dbpassword_site = "2eD}vYdrnQYWUl:T@PUT3";
+    $dbname_site = "easeapp_db";	
     
     }
 	

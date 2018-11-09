@@ -191,10 +191,20 @@
 							 "request_method" => "POST" 							 
 							);	
 							
-//API for get user details
+//API for get User Details
 $routes["rest-get-user-details"] = array("route_value" => "/rest/user-details/get",
 							 "route_var_count" => "4",
 							 "page_filename" => "rest-user-details-get.php",
+							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "1",
+							 "is_frontend_page" => "3",
+							 "request_method" => "POST" 							 
+							);	
+
+//API to provide List of User Groups
+$routes["rest-user-groups-list"] = array("route_value" => "/rest/user-groups/list",
+							 "route_var_count" => "4",
+							 "page_filename" => "rest-user-groups-list.php",
 							 "is_ajax" => "1",
 							 "is_web_service_endpoint" => "1",
 							 "is_frontend_page" => "3",

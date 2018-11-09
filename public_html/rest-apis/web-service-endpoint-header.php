@@ -52,14 +52,18 @@ if ($ea_received_rest_ws_content_type != "application/json") {
 //getRequestHeaders() is used to collect Request Headers w.r.t. REST API, when apache_request_headers() function is unavailable.
 $ea_received_request_headers = getRequestHeaders();
 
+//JSON Encode the Request Headers, to show them in the Log.
+$ea_received_request_headers_json_encoded = json_encode($ea_received_request_headers);
+
 foreach ($ea_received_request_headers as $ea_received_request_header => $ea_received_request_header_value) {
 	if (strtolower($ea_received_request_header) == "authorization") {
 		list($ea_auth_token) = sscanf(trim($ea_received_request_header_value), 'Bearer %s');
 	}//close of if (strtolower($ea_received_request_header) == "authorization") {
 		
 }//close of foreach ($ea_received_request_headers as $ea_received_request_header => $ea_received_request_header_value) {
-	
+
 if ($ea_auth_token != "") {		
+	
 	//$ea_auth_token_validation_status = validateAuthToken($ea_auth_token);
 	$ea_auth_token_validation_status = ea_validate_hs256_alg_jwt_token($ea_auth_token);
 }//close of if ($ea_auth_token != "") {

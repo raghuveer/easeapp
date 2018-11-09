@@ -69,7 +69,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				$mobile_input = "";
 			}//close of if (($mobile_input == '0') || (!ctype_digit($mobile_input))) {
 			
-		}//close of else if of if ($unique_identifier_setting_input == "email-address") {
+		}//close of else if of if ($user_unique_identifier_string_setting == "email-address") {
 		
 		//Check if the IP Address Input is a Valid IPv4 Address
 		if (filter_var($ea_received_rest_ws_raw_array_input['ip_address'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
@@ -85,20 +85,36 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 		if ($user_unique_identifier_string_setting == "") {
 			//Invalid Unique Identifier setting scenario
 			
+			//Construct Content, that will be sent in Response body, of the REST Web Service
+			$response['status'] = "invalid-user-identifier-setting";
+			$response['status-description'] = "Invalid User Identifier Setting, please check and try again.";
+			
 			$eventLog->log("Please provide a valid unique identifier setting.");
 			
 		} else if (($user_unique_identifier_string_setting == "email-address") && ($email_input == "")) {
 			//Invalid Email Address scenario
+			
+			//Construct Content, that will be sent in Response body, of the REST Web Service
+			$response['status'] = "missing-email-address";
+			$response['status-description'] = "Email Address is expected as User Identifier, please check and try again.";
 			
 			$eventLog->log("Please provide a valid Email Address.");
 			
 		} else if (($user_unique_identifier_string_setting == "mobile-number") && ($mobile_input == "")) {
 			//Invalid Mobile Number scenario
 			
+			//Construct Content, that will be sent in Response body, of the REST Web Service
+			$response['status'] = "missing-mobile-number";
+			$response['status-description'] = "Mobile Number is expected as User Identifier, please check and try again.";
+			
 			$eventLog->log("Please provide a valid Mobile Number.");
 					  
 		} else if (($password_input == "") || ($ip_address_input == "")) {
 			//One or More Inputs are Missing!!!
+			
+			//Construct Content, that will be sent in Response body, of the REST Web Service
+			$response['status'] = "missing-additional-information";
+			$response['status-description'] = "Some Additional Information like Password and / or IP Address (IPv4) is missing, please check and try again.";
 			
 			$eventLog->log("Please provide all information.");
 					  
@@ -216,7 +232,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 							$eventLog->log("User Token related information - Token Created Time Epoch: " . $token_created_time_epoch . "::::: Token Expiry Time Epoch: " . $token_expiry_epoch . "::::: Recently Active JWT Token Details: " . "::::: JTI: " . $jwt_token_rel_unique_jti . "\r\n");
 							
 							//Generate JWT Token, based on HS256 / HMAC of SHA256 algorithm
-							$jwt_token_created = ea_generate_hs256_alg_jwt_token($user_id, $user_type, $user_privileges_list, $jwtTokenIssuer, $user_id, $jwt_token_audience_json_encoded, $token_created_time_epoch, $token_created_time_epoch, $token_expiry_epoch, $jwt_token_rel_unique_jti);
+							$jwt_token_created = ea_generate_hs256_alg_jwt_token($user_type, $user_privileges_list, $jwtTokenIssuer, $user_id, $jwt_token_audience_json_encoded, $token_created_time_epoch, $token_created_time_epoch, $token_expiry_epoch, $jwt_token_rel_unique_jti);
 							
 							//$jwt_token_created = "ugfyiftgfiyyhjgdygjbgfkufhighkfhghigkj";
 							
@@ -278,7 +294,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				}//close of else of if ((isset($login_request_response_array["user_status"])) && ($login_request_response_array["user_status"] = "1")) {
 				
 			} catch (Exception $e) {
-				$eventLog->log("Exception -> " . $e->getMessage()); 
+				$eventLog->log("Exception -> " . html_escaped_output($e->getMessage())); 
 				//addLog($logFile, "Exception -> ".$e->getMessage());		
 			}//close of catch (Exception $e) { 
 			
@@ -287,9 +303,13 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 	}//close of if ($ea_maintenance_mode == false) {
 	
 } else {
+	
+	//Construct Content, that will be sent in Response body, of the REST Web Service
+	$response['status'] = "invalid-input";
+	$response['status-description'] = "Invalid Input, Please check and provide all information.";
+	
 	//Define Response Header, with 400 Bad Request HTTP Response Code, back to the Client Application
 	header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 400 Bad Request');
-	exit;
 }//close of else of if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest_ws_raw_array_input)) && (count($ea_received_rest_ws_raw_array_input) == "4")) {
 
 //Check if Maintenance Mode is Turned On
@@ -298,6 +318,7 @@ if ($ea_maintenance_mode) {
 	//Define Response Header, with Maintenance Status and corresponding Wait time information, back to the Client Application
 	header('Maintenance-Progress: true', false);
 	header('Maintenance-Time: '.html_escaped_output($ea_maintanance_mode_time), false);	
+	header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 503 Service Unavailable');
 	
 } else {	
 
