@@ -12,48 +12,14 @@ ob_start();
 //headers to enable cors in php for one or more websites
 //header('Access-Control-Allow-Origin: *');
 //header('Access-Control-Allow-Origin: http://www.remotewebsite.com');
-/**
- *  An example CORS-compliant method.  It will allow any GET, POST, or OPTIONS requests from any
- *  origin.
- *
- *  In a production environment, you probably want to be more restrictive, but this gives you
- *  the general idea of what is involved.  For the nitty-gritty low-down, read:
- *
- *  - https://developer.mozilla.org/en/HTTP_access_control
- *  - http://www.w3.org/TR/cors/
- *  - https://stackoverflow.com/a/9866124
- */
  
 //To prevent direct access to a file inside public root or public_html or www folder, 
 define("START", "No Direct Access", true);
 
 include "../app/includes/header-functions.php";
-cors();
-
-/* for php websites
-header('Content-Type:text/html; charset=UTF-8');
-header( 'Expires: Sat, 26 Jul 1997 05:00:00 GMT' );*/
-header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
-header( 'Cache-Control: no-store, no-cache, must-revalidate' );
-header( 'Cache-Control: pre-check=0', false ); //post-check=0 is removed, as per guidelines of Fiddler
-//header( 'Pragma: no-cache' ); //this Pragma header is commented, as this will be useful only on IE Browser, as suggested in Fiddler.
-/*
-FOLLOWING HEADERS are REMOVED in PHP, since these are DEFINED in .HTACCESS FILE
-//prevent mimetype sniffing
-header('x-content-type-options: nosniff');
-//Clickjacking Prevention, while allowing to iframe the page from sameorigin in php
-//header('X-Frame-Options', 'SAMEORIGIN', false);
-//Clickjacking Prevention overall without allowing sameorigin or a different origin from iframing the page in php
-header('X-Frame-Options: DENY');*/
-//remove php version information header (when installed php is < v5.3), Note: it worked in php 5.5 as well
-//header('x-powered-by:');
-//remove php version information header (when installed php is => v5.3), this is better as it removes the header instead of replacing the info with something else
-header_remove('x-powered-by');
-//to allow flash to share client side data between its applications in php
-header('X-Permitted-Cross-Domain-Policies: master-only');
-
-/*//To prevent direct access to a file inside public root or public_html or www folder, 
-define("START", "No Direct Access", true);*/
+ea_cors_headers();
+ea_application_security_headers();
+ea_application_browser_cache_headers();
 
 //include timer class file and create object
 include "../app/class/Timer.php";
