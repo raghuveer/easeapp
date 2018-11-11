@@ -66,7 +66,7 @@ function ea_check_user_login_with_email_address($email_address_input, $password_
 					
 				}//close of foreach($user_classification_details_result as $user_classification_details_result_row) {
 				
-				$constructed_array["user_privileges_list"] = implode(", ", $user_classification_name_association_ups_array);
+				$constructed_array["user_privileges_list"] = implode(",", $user_classification_name_association_ups_array);
 				
 			} else {
 				$constructed_array["login_request_auth_status"] = "0"; // Login Failure
@@ -136,7 +136,7 @@ function ea_check_user_login_with_mobile_number($mobile_number_input, $password_
 					
 				}//close of foreach($user_classification_details_result as $user_classification_details_result_row) {
 				
-				$constructed_array["user_privileges_list"] = implode(", ", $user_classification_name_association_ups_array);
+				$constructed_array["user_privileges_list"] = implode(",", $user_classification_name_association_ups_array);
 				
 				
 			} else {

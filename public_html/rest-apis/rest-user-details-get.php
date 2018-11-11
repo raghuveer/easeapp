@@ -67,8 +67,13 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				//Invalid Unique Identifier setting scenario
 				
 				//Construct Content, that will be sent in Response body, of the REST Web Service
+				$response['data'] = array();
 				$response['status'] = "invalid-user-identifier-setting";
-				$response['status-description'] = "Invalid User Identifier Setting, please check and try again.";
+				$response['status-description'] = "Invalid User Identifier Configuration Setting, please notify the Webmaster.";
+				$response['jwt-audience'] = array();
+				
+				//Define Response Header, with 500 Internal Server Error HTTP Response Code, back to the Client Application
+				header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 500 Internal Server Error');
 				
 				$eventLog->log("Please provide a valid unique identifier setting.");
 				
@@ -76,6 +81,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				//Invalid Email Address scenario
 				
 				//Construct Content, that will be sent in Response body, of the REST Web Service
+				$response['data'] = array();
 				$response['status'] = "missing-email-address";
 				$response['status-description'] = "Email Address is expected as User Identifier, please check and try again.";
 				
@@ -85,6 +91,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				//Invalid Mobile Number scenario
 				
 				//Construct Content, that will be sent in Response body, of the REST Web Service
+				$response['data'] = array();
 				$response['status'] = "missing-mobile-number";
 				$response['status-description'] = "Mobile Number is expected as User Identifier, please check and try again.";
 				
@@ -94,6 +101,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				//One or More Inputs are Missing!!!
 				
 				//Construct Content, that will be sent in Response body, of the REST Web Service
+				$response['data'] = array();
 				$response['status'] = "missing-additional-information";
 				$response['status-description'] = "Some Additional Information like IP Address (IPv4) is missing, please check and try again.";
 				
@@ -115,7 +123,11 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 					if ($quick_user_info_result_count > "0") {
 						//Valid User Exists!!!
 						
-						$response[] = $quick_user_info_result;
+						$response['data'] = $quick_user_info_result;
+						
+						//Construct Content, that will be sent in Response body, of the REST Web Service
+						$response['status'] = "user-details-received";
+						$response['status-description'] = "User Details Successfully Received";
 						
 						$quick_user_info_result_json_encoded = json_encode($quick_user_info_result);
 					
@@ -124,8 +136,9 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 					} else {
 						
 						//Construct Content, that will be sent in Response body, of the REST Web Service
-						$response['status'] = "invalid-user-id-reference";
-						$response['status-description'] = "Invalid User ID Reference.";
+						$response['data'] = array();
+						$response['status'] = "invalid-user-references";
+						$response['status-description'] = "Invalid User References.";
 						
 						$eventLog->log("User Info -> Invalid User ID Submitted, please check and try again."); 
 					}//close of else of if ($quick_user_info_result_count > "0") {
@@ -143,6 +156,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 		} else {
 			
 			//Construct Content, that will be sent in Response body, of the REST Web Service
+			$response['data'] = array();
 			$response['status'] = "access-forbidden";
 			$response['status-description'] = "Resources that requires a different set of access permissions are requested, please contact admin, if access to these resources are required.";
 			
@@ -156,6 +170,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 } else {
 	
 	//Construct Content, that will be sent in Response body, of the REST Web Service
+	$response['data'] = array();
 	$response['status'] = "invalid-input";
 	$response['status-description'] = "Invalid Input, Please check and provide all information.";
 	

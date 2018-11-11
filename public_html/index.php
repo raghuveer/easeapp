@@ -42,7 +42,8 @@ date_default_timezone_set($date_default_timezone_set); // $date_default_timezone
 }
 
 //HTMLawed Library to purify and filter HTML (http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/)
-include "../app/includes/htmLawed.php"; 
+//include "../app/includes/htmLawed.php"; 
+include "../app/includes/htmLawed-1241.php"; 
 include "../app/includes/validate-sanitize-functions.php";
 
 // This token is used by forms to prevent cross site forgery attempts
