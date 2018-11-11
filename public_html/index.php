@@ -16,10 +16,15 @@ ob_start();
 //To prevent direct access to a file inside public root or public_html or www folder, 
 define("START", "No Direct Access", true);
 
+include "../app/core/server-var-info.php";
+include "../app/core/main-config.php";
 include "../app/includes/header-functions.php";
 ea_cors_headers();
 ea_application_security_headers();
 ea_application_browser_cache_headers();
+
+
+
 
 //include timer class file and create object
 include "../app/class/Timer.php";
@@ -31,9 +36,8 @@ if ($page_is_ajax != "1") {
 }
 
 define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
-include "../app/core/server-var-info.php";
-//commented 02-11-2018 include "../app/core/server-var-info.php";
-include "../app/core/main-config.php";
+/*//11-11-2018 include "../app/core/server-var-info.php";
+include "../app/core/main-config.php";*/
 
 if(function_exists("date_default_timezone_set"))
 {

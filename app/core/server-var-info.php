@@ -29,6 +29,7 @@
   $_SERVER['DOCUMENT_ROOT'] = isset($_SERVER['DOCUMENT_ROOT']) ? filter_var($_SERVER['DOCUMENT_ROOT'], FILTER_SANITIZE_STRING) : '';
   $_SERVER['REQUEST_METHOD'] = isset($_SERVER['REQUEST_METHOD']) ? filter_var($_SERVER['REQUEST_METHOD'], FILTER_SANITIZE_STRING) : '';
   $_SERVER["CONTENT_TYPE"] = isset($_SERVER["CONTENT_TYPE"]) ? filter_var($_SERVER["CONTENT_TYPE"], FILTER_SANITIZE_STRING) : '';
+  $_SERVER['HTTP_ORIGIN'] = isset($_SERVER['HTTP_ORIGIN']) ? filter_var($_SERVER['HTTP_ORIGIN'], FILTER_SANITIZE_STRING) : '';
   $curl_useragent_array = array(
     'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)',
     'Mozilla/5.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)',
