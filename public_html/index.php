@@ -16,211 +16,62 @@ ob_start();
 //To prevent direct access to a file inside public root or public_html or www folder, 
 define("START", "No Direct Access", true);
 
+//Filtered $_SERVER Variables (required ones)
 include "../app/core/server-var-info.php";
-include "../app/core/main-config.php";
+
+//Header Functions
 include "../app/includes/header-functions.php";
+
+//Issues CORS headers for the application
 ea_cors_headers();
+
+//Issues Security Headers for the application
 ea_application_security_headers();
-ea_application_browser_cache_headers();
 
-
-
+//Main Application Configuration File
+include "../app/core/main-config.php";
 
 //include timer class file and create object
 include "../app/class/Timer.php";
 $load_time1 = new Timer();
- 
+
+//For Web Applications, Timer Start, to know how much time, an application request consumed 
 if ($page_is_ajax != "1") {
   // calculate the time it takes to run page load time using timer #1 start
   $load_time1->start();
-}
-
+}//close of if ($page_is_ajax != "1") {
+	
 define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
-/*//11-11-2018 include "../app/core/server-var-info.php";
-include "../app/core/main-config.php";*/
 
-if(function_exists("date_default_timezone_set"))
-{
+if(function_exists("date_default_timezone_set")) {
 //Define the Default timezone.	
 date_default_timezone_set($date_default_timezone_set); // $date_default_timezone_set from /app/core/main-config.php
-}
+}//close of if(function_exists("date_default_timezone_set")) {
+	
 
 //HTMLawed Library to purify and filter HTML (http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/)
 //include "../app/includes/htmLawed.php"; 
 include "../app/includes/htmLawed-1241.php"; 
+
+//Few Validation and Sanitizing Functions
 include "../app/includes/validate-sanitize-functions.php";
 
-// This token is used by forms to prevent cross site forgery attempts
-if (!isset($_SESSION['nonce'])) {
-$_SESSION['nonce'] = create_csrf_nonce($hash_algorithm, "20"); //$hash_algorithm from /app/core/main-config.php
-}
-
-//This does the pre-defined host name, thus observing the host of the script, if it is Dev / Live Environment
-include "../app/core/hostname-check.php";
-
-
-// **PREVENTING SESSION HIJACKING**
-// Prevents javascript XSS attacks aimed to steal the session ID
-ini_set('session.cookie_httponly', 1);
-// Uses a secure connection (HTTPS) to send cookies on https. (This has to be defined when ssl certificate is installed on the domain name and https is enabled for the hostname, otherwise, session variables will be cleared and made empty after the redirect).
-
-if ($site_protocol_name == "https://") {
-	ini_set('session.cookie_secure', 1);//this has to be enabled only on HTTPS
-} else {
-	ini_set('session.cookie_secure', 0);//this has to be enabled only on HTTPS
-}//close of else of if ($site_protocol_name == "https://") {
-
-ini_set('session.cookie_lifetime', 0); 
-//ini_set('session.entropy_file', '/dev/urandom'); //Removed in PHP 7.1.0.
-//ini_set('session.entropy_length', 512); //Removed in PHP 7.1.0
-//ini_set('session.hash_function', 'whirlpool'); //whirlpool as hash function to generate session ids. This setting was introduced in PHP 5. Removed in PHP 7.1.0. 
-// **PREVENTING SESSION FIXATION**
-// Session ID cannot be passed through URLs
-ini_set('session.use_cookies', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.use_trans_sid', 0);
-//ini_set('session.hash_bits_per_character', 5); //Removed in PHP 7.1.0.
-
-//Session Handler and Storage Path Checks
-if ($active_session_backend == "files") {
-	if ($files_based_session_storage_location_choice == "custom-location") {
-		//http://in3.php.net/manual/en/function.mkdir.php
-        //some observations: 0711 or 0755 or may be 0777 for folders work better, in this scenario.
-	    if (!is_dir($files_based_session_storage_custom_path)) {
-	   	
-			mkdir($files_based_session_storage_custom_path, 0755);
-			chmod($files_based_session_storage_custom_path, 0755);
-			clearstatcache();		
-		
-	    } else if (!is_writable($files_based_session_storage_custom_path)) {
-	   	
-			chmod($files_based_session_storage_custom_path, 0755);
-			clearstatcache();		
-		
-	    }//close of else if of if (!is_dir($files_based_session_storage_custom_path)) {
-		
-		//sessions to be stored in "sessions" folder that will be located outside "public_html" folder ($files_based_session_storage_custom_path, as defined in /app/core/main-config.php)
-		ini_set('session.save_path',$files_based_session_storage_custom_path);
-
-	}//Close of if ($files_based_session_storage_location_choice == "custom-location") {
-		
-} else if ($active_session_backend == "redis") {
-	//sessions to be stored in Redis
-	ini_set('session.save_handler', 'redis');
-
-	//sessions to be stored in Redis Path
-	ini_set('session.save_path', $single_redis_server_session_backend_host); // as per /app/core/main-config.php
-}//close of else if of if ($active_session_backend == "files") {
-	
-
-//sessions to be stored in "sessions" folder that will be located outside "public_html" folder
-//ini_set('session.save_path',dirname($_SERVER['DOCUMENT_ROOT']) . "/sessions");
-
-//sessions to be stored in Redis
-//ini_set('session.save_handler', 'redis');
-
-//sessions to be stored in Redis Path
-//ini_set('session.save_path', "tcp://localhost:6379");
-ini_set('session.gc_maxlifetime', $session_max_lifetime_bef_cleanup);
-//ini_set('session.gc_maxlifetime', 86400);
-//enable garbage collection for sessions which will be stored in custom chosen folder that will be placed outside public_html folder
-ini_set('session.gc_probability', 1);
-ini_set('session.gc_divisor ', 100);
-
-//ini_set('session.referer_check', 0); // Checks for HTTP Referer, and if the defined sub string do not match, then the session id will be marked as invalid. This potentially may not allow to have an established session, in above defined scenario.
-session_start();
-if ((!isset($_SESSION['loggedin'])) && ($_SESSION['loggedin'] != "yes")) {
-   $_SESSION['loggedin'] = "no";
-   $_SESSION['sm_user_type'] = "";
-} elseif ((isset($_SESSION['loggedin'])) && ($_SESSION['loggedin'] != "yes")) {
-   $_SESSION['loggedin'] = "no";
-   $_SESSION['sm_user_type'] = "";
-}
-/*
-//To prevent direct access to a file inside public root or public_html or www folder, 
-define("START", "No Direct Access", true);
-
-//include timer class file and create object
-include "../app/class/Timer.php";
-$load_time1 = new Timer();
- 
-if ($page_is_ajax != "1") {
-  // calculate the time it takes to run page load time using timer #1 start
-  $load_time1->start();
-}
-
-define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
-include "../app/core/server-var-info.php";
-include "../app/core/main-config.php";
-*/
-if ($app_site_status == "construction") {
-  echo "<center>This website is under rapid construction sessions, please visit us again, thank you</center>";
-  exit;
-} elseif ($app_site_status == "maintenance") {
-  echo "<center>This website is taken down for maintenance, please visit us again, thank you</center>";
-  exit;
-}
- 
-if($debug_mode == "ON")
-{
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-  //ini_set('display_errors', true);
-  //echo "debug mode on";
-}
-elseif($debug_mode == "OFF")
-{
-  ini_set('display_errors', 0);
-  ini_set('display_startup_errors', 0);
-  error_reporting(0);
-  //echo "debug mode off";
-}
-/*
-if(function_exists("date_default_timezone_set"))
-{
-//Define the Default timezone.	
-date_default_timezone_set($date_default_timezone_set); // $date_default_timezone_set from /app/core/main-config.php
-}
-
-//HTMLawed Library to purify and filter HTML (http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/)
-include "../app/includes/htmLawed.php"; 
-include "../app/includes/validate-sanitize-functions.php";
-
-// This token is used by forms to prevent cross site forgery attempts
-if (!isset($_SESSION['nonce'])) {
-$_SESSION['nonce'] = create_csrf_nonce($hash_algorithm, "20"); //$hash_algorithm from /app/core/main-config.php
-}
-
-//This does the pre-defined host name, thus observing the host of the script, if it is Dev / Live Environment
-include "../app/core/hostname-check.php";
-*/
-//This holds all Session Checking Functions
+//This holds all Session specific and Session Checking Functions
 include "../app/core/session-check-functions.php";
 
-//This holds all User Authorization Functions that ensures if a particular access level is allowed on the particular route or not
-include "../app/core/user-authorization-functions.php";
+//This does the pre-defined host name, thus observing the host of the script, if it is Dev / Live Environment
+include "../app/core/hostname-check.php";
 
-//PHPMailer Library: This is to send Email through SMTP / Sendmail in PHP Scripts
-include "../app/includes/phpmailer-v605/src/PHPMailer.php";
-// Import PHPMailer classes into the global namespace
-// These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-$phpmailer_sendmail = new PHPMailer(true); // the true param means it will throw exceptions on errors, which we need to catch
-$phpmailer_sendmail->IsSendmail(); // telling the class to use SendMail transport
-$phpmailer_sendmail->CharSet="utf-8";
-
-//This is to define a finite list of variables (http://stackoverflow.com/a/2922688)
-for($i = 0; $i <= 20; $i++)
-{
+//This is to automatically define a finite list of Routing Engine Variables (20 will be created in this scenario) (http://stackoverflow.com/a/2922688)
+for ($i = 0; $i <= 20; $i++) {
     $routing_eng_var = 'routing_eng_var_' . $i;
     //echo $routing_eng_var . "<br>";
     $$routing_eng_var = ""; //make column stuff, first time this will be xm0, then xm1, etc.
-}
-
+}//for ($i = 0; $i <= 20; $i++) {
+	
 //This is the simple routing engine of Easeapp Framework that is based on $_SERVER["REQUEST_URI"]
 include "../app/core/routing-engine.php";
+
 
 //This is where the core routing engine rules are defined
 include "../app/core/routing-engine-rules.php";
@@ -233,6 +84,61 @@ include "../app/includes/route-functions.php";
 
 //This is where the route parser lies, that routes the request for the particular virtual resource
 include "../app/core/route-parser.php";
+
+//Session Settings
+ea_application_session_settings();
+
+//Start Session
+session_start();
+
+//Define User Session with pre-login scenario and conventions
+if ((!isset($_SESSION['loggedin'])) && ($_SESSION['loggedin'] != "yes")) {
+   $_SESSION['loggedin'] = "no";
+   $_SESSION['sm_user_type'] = "";
+} else if ((isset($_SESSION['loggedin'])) && ($_SESSION['loggedin'] != "yes")) {
+   $_SESSION['loggedin'] = "no";
+   $_SESSION['sm_user_type'] = "";
+}//close of else if of if ((!isset($_SESSION['loggedin'])) && ($_SESSION['loggedin'] != "yes")) {
+
+//Issues Browser Cache specific Headers for the Application	
+ea_application_browser_cache_headers();
+
+//Site Construction / Maintenance
+if ($app_site_status == "construction") {
+  //echo "<center>This website is under rapid construction sessions, please visit us again, thank you</center>";
+  exit;
+} else if ($app_site_status == "maintenance") {
+  //echo "<center>This website is taken down for maintenance, please visit us again, thank you</center>";
+  exit;
+}//close of else if of if ($app_site_status == "construction") {
+	
+
+//Debug Settings 
+if ($debug_mode == "ON") {
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
+  //ini_set('display_errors', true);
+  //echo "debug mode on";
+} elseif($debug_mode == "OFF") {
+  ini_set('display_errors', 0);
+  ini_set('display_startup_errors', 0);
+  error_reporting(0);
+  //echo "debug mode off";
+}//close of else if of if ($debug_mode == "ON") {
+	
+//This holds all User Authorization Functions that ensures if a particular access level is allowed on the particular route or not
+include "../app/core/user-authorization-functions.php";
+
+//PHPMailer Library: This is to send Email through SMTP / Sendmail in PHP Scripts
+include "../app/includes/phpmailer-v605/src/PHPMailer.php";
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+$phpmailer_sendmail = new PHPMailer(true); // the true param means it will throw exceptions on errors, which we need to catch
+$phpmailer_sendmail->IsSendmail(); // telling the class to use SendMail transport
+$phpmailer_sendmail->CharSet="utf-8";
 
 //This is a compilation of date related custom functions
 include "../app/includes/date-functions.php";
@@ -289,7 +195,6 @@ if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
 	//Include Constant Time Encoding Library v2.0 from Paragonie
 	include "../app/includes/constant-time-encoding-v20/constant-time-encoding-v20-includes.php";
 	//Include Halite Library from Paragonie
-	//include "../app/includes/halite-v402/halite-v402-includes.php";
 	include "../app/includes/halite-v441/halite-v441-includes.php";
 	
 	/*//Check if Libsodium is setup correctly, result will be bool(true), if all is good, https://stackoverflow.com/a/37687595

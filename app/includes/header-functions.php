@@ -67,16 +67,16 @@ function ea_cors_headers() {
 function ea_application_security_headers() {
 	
     //Prevent Mimetype Sniffing
-	//header('x-content-type-options: nosniff');
+	header('x-content-type-options: nosniff');
 	
 	//XSS Protection
-	//header('X-XSS-Protection: 1; mode=block');
+	header('X-XSS-Protection: 1; mode=block');
 	
 	//Clickjacking Prevention, while allowing to iframe the page from sameorigin in php
 	//header('X-Frame-Options', 'SAMEORIGIN', false);
 	
 	//Clickjacking Prevention overall without allowing sameorigin or a different origin from iframing the page in php
-	//header('X-Frame-Options: DENY');
+	header('X-Frame-Options: DENY');
 	
 	//Remove PHP Information (Version) Header
 	header_remove('x-powered-by');

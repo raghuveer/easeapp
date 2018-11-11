@@ -8,8 +8,10 @@
  * @website  http://www.easeapp.org
  * @license  The Easeapp PHP framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
  * @copyright Copyright (c) 2014-2018 Raghu Veer Dendukuri, excluding any third party code / libraries, those that are copyrighted to / owned by it's Authors and / or              * Contributors and is licensed as per their Open Source License choices.
+ *
+ * This is to verify the host name where the script is executed 
  */ 
-//This is to verify the host name where the scipt is executed 
+
 
     /* protocol & hostname start */
 
