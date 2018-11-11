@@ -188,30 +188,36 @@ function ea_get_user_groups_list($sm_user_type_input, $user_group_status_input) 
 	
 	$constructed_array = array();
 	
+	$sm_user_role_input = '%'.'super-admin'.'%';
+
+	
 	if ($user_group_status_input == "0") {
 		//Check in sm_site_member_classification_details db table
-		$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_details` WHERE `sm_user_type`=:sm_user_type AND `is_active_status`=:is_active_status ORDER BY `sm_user_level` ASC";
+		$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_details` WHERE `sm_user_type`=:sm_user_type AND `sm_user_role` NOT LIKE :sm_user_role AND `is_active_status`=:is_active_status ORDER BY `sm_user_level` ASC";
 		
 		$user_classification_details_get_select_query = $dbcon->prepare($user_classification_details_get_sql);
 		$user_classification_details_get_select_query->bindValue(":sm_user_type",$sm_user_type_input);
+		$user_classification_details_get_select_query->bindValue(":sm_user_role",$sm_user_role_input);
 		$user_classification_details_get_select_query->bindValue(":is_active_status","0");
 		$user_classification_details_get_select_query->execute();
 		
 	} else if ($user_group_status_input == "1") {
 		//Check in sm_site_member_classification_details db table
-		$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_details` WHERE `sm_user_type`=:sm_user_type AND `is_active_status`=:is_active_status ORDER BY `sm_user_level` ASC";
+		$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_details` WHERE `sm_user_type`=:sm_user_type AND `sm_user_role` NOT LIKE :sm_user_role AND `is_active_status`=:is_active_status ORDER BY `sm_user_level` ASC";
 		
 		$user_classification_details_get_select_query = $dbcon->prepare($user_classification_details_get_sql);
 		$user_classification_details_get_select_query->bindValue(":sm_user_type",$sm_user_type_input);
+		$user_classification_details_get_select_query->bindValue(":sm_user_role",$sm_user_role_input);
 		$user_classification_details_get_select_query->bindValue(":is_active_status","1");
 		$user_classification_details_get_select_query->execute();
 		
 	} else {
 		//Check in sm_site_member_classification_details db table
-		$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_details` WHERE `sm_user_type`=:sm_user_type ORDER BY `sm_user_level` ASC";
+		$user_classification_details_get_sql = "SELECT * FROM `sm_site_member_classification_details` WHERE `sm_user_type`=:sm_user_type AND `sm_user_role` NOT LIKE :sm_user_role ORDER BY `sm_user_level` ASC";
 		
 		$user_classification_details_get_select_query = $dbcon->prepare($user_classification_details_get_sql);
 		$user_classification_details_get_select_query->bindValue(":sm_user_type",$sm_user_type_input);
+		$user_classification_details_get_select_query->bindValue(":sm_user_role",$sm_user_role_input);
 		$user_classification_details_get_select_query->execute();
 	}//close of else of if ($user_group_status_input == "0") {
 	
@@ -311,16 +317,16 @@ function ea_get_quick_user_info_based_on_email_or_mobile($email_input, $mobile_i
 		
 		$sm_memb_id_input = $quick_user_info_get_select_query_result["sm_memb_id"];
 		
-		$constructed_array[$sm_memb_id_input]["user_id"] = $quick_user_info_get_select_query_result["sm_memb_id"];
-		$constructed_array[$sm_memb_id_input]["user_email"] = $quick_user_info_get_select_query_result["sm_email"];
-		$constructed_array[$sm_memb_id_input]["user_mobile"] = $quick_user_info_get_select_query_result["sm_mobile"];
-		$constructed_array[$sm_memb_id_input]["user_phone"] = $quick_user_info_get_select_query_result["sm_phone"];
-		$constructed_array[$sm_memb_id_input]["user_salutation"] = $quick_user_info_get_select_query_result["sm_salutation"];
-		$constructed_array[$sm_memb_id_input]["user_firstname"] = $quick_user_info_get_select_query_result["sm_firstname"];
-		$constructed_array[$sm_memb_id_input]["user_middlename"] = $quick_user_info_get_select_query_result["sm_middlename"];
-		$constructed_array[$sm_memb_id_input]["user_lastname"] = $quick_user_info_get_select_query_result["sm_lastname"];
-		$constructed_array[$sm_memb_id_input]["user_type"] = $quick_user_info_get_select_query_result["sm_user_type"];
-		$constructed_array[$sm_memb_id_input]["user_status"] = $quick_user_info_get_select_query_result["sm_user_status"];
+		$constructed_array["user_id"] = $quick_user_info_get_select_query_result["sm_memb_id"];
+		$constructed_array["user_email"] = $quick_user_info_get_select_query_result["sm_email"];
+		$constructed_array["user_mobile"] = $quick_user_info_get_select_query_result["sm_mobile"];
+		$constructed_array["user_phone"] = $quick_user_info_get_select_query_result["sm_phone"];
+		$constructed_array["user_salutation"] = $quick_user_info_get_select_query_result["sm_salutation"];
+		$constructed_array["user_firstname"] = $quick_user_info_get_select_query_result["sm_firstname"];
+		$constructed_array["user_middlename"] = $quick_user_info_get_select_query_result["sm_middlename"];
+		$constructed_array["user_lastname"] = $quick_user_info_get_select_query_result["sm_lastname"];
+		$constructed_array["user_type"] = $quick_user_info_get_select_query_result["sm_user_type"];
+		$constructed_array["user_status"] = $quick_user_info_get_select_query_result["sm_user_status"];
 		
 		$user_classification_details_result = ea_get_user_classication_details($sm_memb_id_input);
 		
@@ -334,7 +340,7 @@ function ea_get_quick_user_info_based_on_email_or_mobile($email_input, $mobile_i
 			
 		}//close of foreach($user_classification_details_result as $user_classification_details_result_row) {
 		
-		$constructed_array[$sm_memb_id_input]["user_privileges_list"] = implode(", ", $user_classification_name_association_ups_array);
+		$constructed_array["user_privileges_list"] = implode(",", $user_classification_name_association_ups_array);
 		
 		return $constructed_array;
 	}//close of if($quick_user_info_get_select_query->rowCount() > 0) {

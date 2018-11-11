@@ -40,6 +40,7 @@ function ea_cors_headers() {
 		header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Max-Age: 86400');    // cache for 1 day
+		header("Access-Control-Expose-Headers: authorization");
     }
 
     // Access-Control headers are received during OPTIONS requests

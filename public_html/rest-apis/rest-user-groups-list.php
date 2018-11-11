@@ -47,6 +47,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				//Invalid User Type scenario
 				
 				//Construct Content, that will be sent in Response body, of the REST Web Service
+				$response['data'] = array();
 				$response['status'] = "invalid-user-type";
 				$response['status-description'] = "Invalid User Type info submitted, please check and try again.";
 				
@@ -56,6 +57,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				//Invalid User Group Status scenario
 				
 				//Construct Content, that will be sent in Response body, of the REST Web Service
+				$response['data'] = array();
 				$response['status'] = "invalid-user-group-status";
 				$response['status-description'] = "Invalid User Group Status info submitted, please check and try again.";
 				
@@ -65,6 +67,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 				//One or More Inputs are Missing!!!
 				
 				//Construct Content, that will be sent in Response body, of the REST Web Service
+				$response['data'] = array();
 				$response['status'] = "missing-additional-information";
 				$response['status-description'] = "Some Additional Information like IP Address (IPv4) is missing, please check and try again.";
 				
@@ -86,7 +89,11 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 					if ($user_group_list_result_count > "0") {
 						//One or More User Groups Exist and Active
 						
-						$response[] = $user_group_list_result;
+						$response['data'] = $user_group_list_result;
+						
+						//Construct Content, that will be sent in Response body, of the REST Web Service
+						$response['status'] = "user-groups-details-received";
+						$response['status-description'] = "User Group Details Successfully Received";
 						
 						$user_group_list_result_json_encoded = json_encode($user_group_list_result);
 					
@@ -95,6 +102,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 					} else {
 						
 						//Construct Content, that will be sent in Response body, of the REST Web Service
+						$response['data'] = array();
 						$response['status'] = "active-user-groups-doesnot-exist";
 						$response['status-description'] = "User Groups List -> No Active User Groups Exist, please check and try again.";
 						
@@ -114,6 +122,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 		} else {
 			
 			//Construct Content, that will be sent in Response body, of the REST Web Service
+			$response['data'] = array();
 			$response['status'] = "access-forbidden";
 			$response['status-description'] = "Resources that require a different set of access permissions are requested, please contact admin, if access to these resources are required.";
 			
@@ -127,6 +136,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 } else {
 
 	//Construct Content, that will be sent in Response body, of the REST Web Service
+	$response['data'] = array();
 	$response['status'] = "invalid-input";
 	$response['status-description'] = "Invalid Input, Please check and provide all information.";
 	

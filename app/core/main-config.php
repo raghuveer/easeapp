@@ -210,7 +210,7 @@ $user_unique_identifier_string_setting = "email-address";//email-address | mobil
 //Generic Details
 $jwtTokenIssuer = "Easeapp JWT Token Issuer";
 $jwtTokenAudience = array('Web Application','Android Mobile App','iOS mobile App');
-$jwtTokenlifeTime = "7200"; //2 hours = 7200 seconds
+$jwtTokenlifeTime = "86400"; //2 hours = 7200 seconds
 
 //HS256 Specific Details
 $jwtAuthTokenSecretKey = "9pzAcm770qEoqAMPxtSheDipSLW8d3LFvfpNBfeUi8brsbSDGGAXhglzp5UZnDOGA+5NiL7ndQCt1MqkX1eZTA==";

@@ -82,12 +82,16 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 	
 	
 		//Check if all inputs are received correctly from the REST Web Service
-		if ($user_unique_identifier_string_setting == "") {
+		if (($user_unique_identifier_string_setting != "email-address") && ($user_unique_identifier_string_setting != "mobile-number")) {
 			//Invalid Unique Identifier setting scenario
 			
 			//Construct Content, that will be sent in Response body, of the REST Web Service
 			$response['status'] = "invalid-user-identifier-setting";
-			$response['status-description'] = "Invalid User Identifier Setting, please check and try again.";
+			$response['status-description'] = "Invalid User Identifier Configuration Setting, please notify the Webmaster.";
+			$response['jwt-audience'] = array();
+			
+			//Define Response Header, with 500 Internal Server Error HTTP Response Code, back to the Client Application
+			header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 500 Internal Server Error');
 			
 			$eventLog->log("Please provide a valid unique identifier setting.");
 			
@@ -97,6 +101,10 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 			//Construct Content, that will be sent in Response body, of the REST Web Service
 			$response['status'] = "missing-email-address";
 			$response['status-description'] = "Email Address is expected as User Identifier, please check and try again.";
+			$response['jwt-audience'] = array();
+			
+			//Define Response Header, with 401 Unauthorized HTTP Response Code, back to the Client Application
+			header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 401 Unauthorized');
 			
 			$eventLog->log("Please provide a valid Email Address.");
 			
@@ -106,6 +114,10 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 			//Construct Content, that will be sent in Response body, of the REST Web Service
 			$response['status'] = "missing-mobile-number";
 			$response['status-description'] = "Mobile Number is expected as User Identifier, please check and try again.";
+			$response['jwt-audience'] = array();
+			
+			//Define Response Header, with 401 Unauthorized HTTP Response Code, back to the Client Application
+			header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 401 Unauthorized');
 			
 			$eventLog->log("Please provide a valid Mobile Number.");
 					  
@@ -115,6 +127,10 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 			//Construct Content, that will be sent in Response body, of the REST Web Service
 			$response['status'] = "missing-additional-information";
 			$response['status-description'] = "Some Additional Information like Password and / or IP Address (IPv4) is missing, please check and try again.";
+			$response['jwt-audience'] = array();
+			
+			//Define Response Header, with 401 Unauthorized HTTP Response Code, back to the Client Application
+			header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 401 Unauthorized');
 			
 			$eventLog->log("Please provide all information.");
 					  
@@ -236,12 +252,13 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 							
 							//$jwt_token_created = "ugfyiftgfiyyhjgdygjbgfkufhighkfhghigkj";
 							
-							//Define Response Header, with JWT Token, back to the Client Application
+							//Define Response Header, with 200 Ok HTTP Response Code and the JWT Token, back to the Client Application
 							header('Authorization: '. 'Bearer ' . html_escaped_output($jwt_token_created));
 							
 							//Construct Content, that will be sent in Response body, of the REST Web Service
 							$response['status'] = "login-success";
 							$response['status-description'] = "Login Successful.";
+							$response['jwt-audience'] = $jwtTokenAudience;
 							
 						}//close of if ($user_id != "") {
 						$eventLog->log("token details are posted above.");
@@ -254,6 +271,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 						//Construct Content, that will be sent in Response body, of the REST Web Service
 						$response['status'] = "login-failure";
 						$response['status-description'] = "Invalid User Credentials. Please check and try again.";
+						$response['jwt-audience'] = array();
 						
 						//Define Response Header, with 401 Unauthorized HTTP Response Code, back to the Client Application
 						header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 401 Unauthorized');
@@ -266,6 +284,10 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 					//Construct Content, that will be sent in Response body, of the REST Web Service
 					$response['status'] = "inactive-user";
 					$response['status-description'] = "This User Account is In-active at this moment. Please click on the Email Activation Link, to activate this Account.";
+					$response['jwt-audience'] = array();
+					
+					//Define Response Header, with 401 Unauthorized HTTP Response Code, back to the Client Application
+					header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 401 Unauthorized');
 					
 				} else if ((isset($login_request_response_array["user_status"])) && ($login_request_response_array["user_status"] == "2")) {
 					$eventLog->log("Suspended Email Address / Mobile Number.");
@@ -273,6 +295,10 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 					//Construct Content, that will be sent in Response body, of the REST Web Service
 					$response['status'] = "suspended-user";
 					$response['status-description'] = "This User Account is Suspended at this moment. Please reachout to the Site Admin, for further queries.";
+					$response['jwt-audience'] = array();
+					
+					//Define Response Header, with 401 Unauthorized HTTP Response Code, back to the Client Application
+					header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 401 Unauthorized');
 					
 				} else if ((isset($login_request_response_array["user_status"])) && ($login_request_response_array["user_status"] == "3")) {
 					$eventLog->log("Banned Email Address / Mobile Number.");
@@ -280,6 +306,10 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 					//Construct Content, that will be sent in Response body, of the REST Web Service
 					$response['status'] = "banned-user";
 					$response['status-description'] = "This User Account is Banned at this moment. Please reachout to the Site Admin, for further queries.";
+					$response['jwt-audience'] = array();
+					
+					//Define Response Header, with 401 Unauthorized HTTP Response Code, back to the Client Application
+					header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 401 Unauthorized');
 					
 				} else {
 					$eventLog->log("Invalid Email Address / Mobile Number.");
@@ -287,7 +317,8 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 					//Construct Content, that will be sent in Response body, of the REST Web Service
 					$response['status'] = "invalid-user-account";
 					$response['status-description'] = "Invalid User Account.";
-					
+					$response['jwt-audience'] = array();
+
 					//Define Response Header, with 401 Unauthorized HTTP Response Code, back to the Client Application
 					header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 401 Unauthorized');
 					
@@ -307,6 +338,7 @@ if ((isset($ea_received_rest_ws_raw_array_input)) && (is_array($ea_received_rest
 	//Construct Content, that will be sent in Response body, of the REST Web Service
 	$response['status'] = "invalid-input";
 	$response['status-description'] = "Invalid Input, Please check and provide all information.";
+	$response['jwt-audience'] = array();
 	
 	//Define Response Header, with 400 Bad Request HTTP Response Code, back to the Client Application
 	header(html_escaped_output($_SERVER['SERVER_PROTOCOL']) . ' 400 Bad Request');

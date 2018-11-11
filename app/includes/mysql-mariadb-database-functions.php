@@ -39,12 +39,11 @@ function update_query_based_on_id($sql, $values_array){
 	
 	$update_query = $dbcon->prepare($sql);
 	if($update_query->execute($values_array)) {
-	   return "success";
+	   return true;
 	}
-	return "failure";
+	return false;
 }
 //$update_status = update_query_based_on_id($sql, $update_values_array);
-
 
 function delete_query_based_on_id($sql, $values_array){
 	global $dbcon;
