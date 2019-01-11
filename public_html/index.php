@@ -308,6 +308,14 @@ include "../app/includes/user-authentication-info-functions.php";
 //This holds all JSON Web Token Creating / Checking Functions
 include "../app/includes/json-web-token-functions.php";
 
+/*
+$eventLogFileName = "test-log";
+$eventLog = new Logger($eventLogFileName, true);
+$eventLog->logNewSeperator();
+//$eventLog->log("Content-type => " . $_SERVER["CONTENT_TYPE"];
+$eventLog->log("Server protocol => " . $_SERVER['SERVER_PROTOCOL']);
+$eventLog->log("REQUEST URI => " . $_SERVER['REQUEST_URI']);
+*/
 //Include a Template Engine here, if integrating some template engine
 // 1) Init
 /* include '../app/template-library/krupa.php';

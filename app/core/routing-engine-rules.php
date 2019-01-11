@@ -209,6 +209,16 @@ $routes["rest-user-groups-list"] = array("route_value" => "/rest/user-groups/lis
 							 "is_web_service_endpoint" => "1",
 							 "is_frontend_page" => "3",
 							 "request_method" => "POST" 							 
+							);
+
+//API to provide List of User Groups
+$routes["rest-test-content"] = array("route_value" => "/rest/test-content",
+							 "route_var_count" => "3",
+							 "page_filename" => "rest-test-content.php",
+							 "is_ajax" => "1",
+							 "is_web_service_endpoint" => "1",
+							 "is_frontend_page" => "3",
+							 "request_method" => "GET" 							 
 							);							
 	
 ?>
